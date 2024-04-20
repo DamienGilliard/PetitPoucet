@@ -1,10 +1,10 @@
 # exported data
-.gpx
-.ply
-.xyz
+*.gpx
+*.ply
+*.xyz
 
 # pycache
-.pyc
+*.pyc
 
 # original fit file
-.fit
+*.fit
