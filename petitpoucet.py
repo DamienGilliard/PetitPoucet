@@ -2,7 +2,7 @@ import importer
 import exporter
 import open3d
 
-filename = 'Van_Sansepolcro_naar_Urbino_course'
+filename = '2022-09-22-09-51-17'
 lat, long, alt = importer.extract_lat_long_alt(filename + '.fit')
 # importer.print_fit_file(filename + '.fit')
 
