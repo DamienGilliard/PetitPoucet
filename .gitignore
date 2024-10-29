@@ -8,3 +8,7 @@
 
 # original fit file
 *.fit
+
+# generated files
+build/
+cpp/build/
