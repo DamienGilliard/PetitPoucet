@@ -1,0 +1,2 @@
+caster: caster.centipede.fr:2101/LXLY
+serial: ttyACM0:115200:8:n:1:off
