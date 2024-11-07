@@ -8,10 +8,32 @@ int main(int argc, char **argv)
 {
     // rtklib's stream server
     static strsvr_t streamServer;
+    static volatile int intrflg=0;
     int options[]={10000,10000,2000,32768,10,0,30,0}; //not quite sure what this is... but it is needed
+    char *msg, *opt;
     int types[2] = {STR_NTRIPCLI, STR_SERIAL};
+    double stapos[3]={0};
     char *paths[2];
     char *logs[2];
+    char *cmds[2];
+    char *cmds_periodic[2];
+
+    //dummy message and option
+    msg = new char[1];
+    opt = new char[1];
+    *cmds = {new char[0]};
+    *cmds_periodic = {new char[0]};
+
+    *msg = ' ';
+    *opt = ' ';
+
+    // rtklib's stream converter
+    strconv_t *converter[1]={NULL};
+    if (!(converter[1] = strconvnew(0, 0, msg, 0, 1, opt))){
+        std::cout<<"Help, converstion of stream converter failed !!" << std::endl;
+    }
+
+    strsvrinit(&streamServer,2);
 
     // Reading the config file
     std::shared_ptr<petitpoucet::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::filemanipulation::ConfigurationSetup>();
@@ -31,6 +53,9 @@ int main(int argc, char **argv)
     strcpy(paths[1], serialPortName.c_str());
 
     // start rtklib's stream server
-    //if (!strsvrstart(&streamServer, options, types, paths, logs,))
+    if (!strsvrstart(&streamServer, options, types, (const char **)paths, (const char **)logs, converter, (const char **)cmds, (const char **)cmds_periodic, stapos))
+    {
+        std::cout << "server start failed" << std::endl;
+    }
 
 }
