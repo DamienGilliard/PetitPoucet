@@ -68,8 +68,12 @@ set_target_properties(rtk PROPERTIES LINKER_LANGUAGE C)
 # Executable
 ############
 
-set(EXECUTABLE_NAME main)
-add_executable(${EXECUTABLE_NAME}
-            main.cc)
+set(EXECUTABLE_NAME_1 main1)
+set(EXECUTABLE_NAME_2 main2)
+add_executable(${EXECUTABLE_NAME_1}
+            main1.cc)
+add_executable(${EXECUTABLE_NAME_2}
+            main2.cc)
 
-target_link_libraries(${EXECUTABLE_NAME} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
+target_link_libraries(${EXECUTABLE_NAME_1} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
+target_link_libraries(${EXECUTABLE_NAME_2} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
