@@ -1,6 +1,8 @@
 #include "rtklib.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <vector>
 #include <memory>
 #include <string>
 #include "PetitPoucet.hh"
@@ -81,16 +83,59 @@ int main(int argc, char **argv)
         /* get stream server status */
         strsvrstat(&streamServerIn,stat,log_stat,byte,bps,strmsg);
         std::string startOfStringTarget = "GNRMC";
-        std::string strmsgString(strmsg);
-        std::cout << "stat: " << std::endl;
-        std::cout << stat[0] << std::endl;
-        std::cout << "end of stat: " << std::endl;
-        std::cout << "streamServerIn.stream[0].msg: " << std::endl;
-        std::cout << streamServerIn.stream[0].msg << std::endl;
-        std::cout << "streamServerIn.strlog[0].msg: " << std::endl;
-        std::cout << streamServerIn.strlog[0].msg << std::endl;
-        
-        sleepms(2000);
-    }
+        std::string line;
+        std::stringstream stringStreamedBuffer;
+        stringStreamedBuffer << streamServerIn.buff;
+        int i = 0;
+        char delimiter = ',';
+        std::string item;
+        while(std::getline(stringStreamedBuffer, line))
+        {
+            std::vector<std::string> vectorizedGNSSMessage;
+            if (line.rfind("$GNGGA", 0) == 0) 
+            {
+                /*
+                GNRMC data is organized as:
+                $GNRMC,<Time>,<Status>,<Latitude>,<N/S>,<Longitude>,<E/W>,<Speed>,<Course>,<Date>,<Magnetic Variation>,<Magnetic Variation Direction>,<Mode>,<Checksum>
+                GNGGA data is organized as:
+                $GNGGA,<Time>,<Latitude>,<N/S>,<Longitude>,<E/W>,<Fix Quality>,<Satellites>,<HDOP>,<Altitude>,<Altitude Unit>,<Geoidal Separation>,<Geoidal Separation Unit>,<DGPS Age>,<DGPS Station ID>*<Checksum>
 
+                */
+                // std::cout << "__________________________________________________________________________________________________________________________________________:"  << std::endl;
+                std::stringstream stringStreamedLine(line);
+                while (std::getline(stringStreamedLine, item, delimiter))
+                {
+                    vectorizedGNSSMessage.push_back(item);
+                }
+                std::cout << "| Longitude: " << vectorizedGNSSMessage[4] ;
+                std::cout << "| Latitude: " << vectorizedGNSSMessage[2];
+                std::cout << "| Altitude: " << vectorizedGNSSMessage[9];
+                std::cout << "| number of satellites used for fix: " << vectorizedGNSSMessage[7];
+                std::cout << "| time and date: " << vectorizedGNSSMessage[1];
+                if (vectorizedGNSSMessage[6] == "5")
+                {
+                    std::cout << "| RTK fixed ! :)";
+                }
+                else if (vectorizedGNSSMessage[6] == "4")
+                {
+                    std::cout << "| RTK float !";
+                }
+                else if (vectorizedGNSSMessage[6] == "2")
+                {
+                    std::cout << "| Differential GPS fix";
+                }
+                else if (vectorizedGNSSMessage[6] == "1")
+                {
+                    std::cout << "| GPS fix :/";
+                }
+                else if (vectorizedGNSSMessage[6] == "0")
+                {
+                    std::cout << "| Invalid fix :(";
+                }
+                std::cout << ""  << std::endl;
+            }
+        }
+        sleepms(5000);
+    }
+    return 0;
 }
