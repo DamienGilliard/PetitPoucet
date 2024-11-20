@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <typeinfo>
 #include "PetitPoucet.hh"
 
 #define MAXSTR      5 
@@ -21,7 +22,7 @@ int main(int argc, char **argv)
     const char ss[]={'E','-','W','C','C'};
     int options[8]={10000,10000,2000,32768,10,2000,30,0}; //options[0]= inactive timeout (ms); options[1]= interval to reconnect (ms); options[2]= averaging time of data rate (ms); options[3]= receive/send buffer size (bytes);; options[4]= server cycle (ms); options[5]= nmea request cycle (ms) (0:no); options[6]= file swap margin (s); options[7]= relay back of output stream (0:no)
     char *msg="1004,1019", *opt, *local="", *proxy="";
-    int typesIn[MAXSTR] = {STR_SERIAL, STR_FILE};
+    int typesIn[MAXSTR] = {STR_SERIAL, STR_NONE};
     int formatsIn[2] = {1,19}, stat[MAXSTR]={0}, log_stat[MAXSTR]={0}, byte[MAXSTR]={0}, bps[MAXSTR]={0};
     double staposIn[3]={0};
     char *pathsIn[MAXSTR] = {0};
@@ -41,8 +42,8 @@ int main(int argc, char **argv)
     }
 
     strsvrinit(&streamServerIn,2);
-    strsetdir(local);
-    strsetproxy(proxy);
+    // strsetdir(local);
+    // strsetproxy(proxy);
 
     // Reading the config file
     std::shared_ptr<petitpoucet::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::filemanipulation::ConfigurationSetup>();
@@ -89,6 +90,8 @@ int main(int argc, char **argv)
         int i = 0;
         char delimiter = ',';
         std::string item;
+        std::vector<int> signalToNoiseRatios;
+        int meanSignalToNoiseRatio;
         while(std::getline(stringStreamedBuffer, line))
         {
             std::vector<std::string> vectorizedGNSSMessage;
@@ -132,9 +135,52 @@ int main(int argc, char **argv)
                 {
                     std::cout << "| Invalid fix :(";
                 }
-                std::cout << ""  << std::endl;
+                std::cout << "| HDPO: " << vectorizedGNSSMessage[8];
             }
+            
+            if (line.rfind("$GPGSV", 0) == 0||line.rfind("$GLGSV", 0) == 0||line.rfind("$GAGSV", 0) == 0|| line.rfind("$GBGSV", 0) == 0)
+            {
+                std::stringstream stringStreamedLine(line);
+                while (std::getline(stringStreamedLine, item, delimiter))
+                {
+                    vectorizedGNSSMessage.push_back(item);
+                }
+                if(!vectorizedGNSSMessage[7].length() == 0)
+                {
+                    signalToNoiseRatios.push_back(std::stoi(vectorizedGNSSMessage[7]));
+                }
+                
+            }
+
+            for(int i=0; i<signalToNoiseRatios.size(); i++)
+            {
+                meanSignalToNoiseRatio += signalToNoiseRatios[i];
+            }
+            meanSignalToNoiseRatio /= signalToNoiseRatios.size();
         }
+
+        std::cout << "| Mean signal to noise ratio: " << meanSignalToNoiseRatio;
+        if(meanSignalToNoiseRatio > 60)
+        {
+            std::cout << ", Too good to be true!" << std::endl;
+        }
+        else if (meanSignalToNoiseRatio > 40)
+        {
+            std::cout << ", Excellent!" << std::endl;
+        }
+        else if (meanSignalToNoiseRatio > 30)
+        {
+            std::cout << ", Good!" << std::endl;
+        }
+        else if (meanSignalToNoiseRatio > 20)
+        {
+            std::cout << ", Fair but not good" << std::endl;
+        }
+        else
+        {
+            std::cout << ", That's baaad :(" << std::endl;
+        }
+        
         sleepms(5000);
     }
     return 0;
