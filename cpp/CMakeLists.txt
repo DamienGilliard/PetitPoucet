@@ -59,6 +59,7 @@ file(GLOB_RECURSE RTKLIB_SOURCES ${RTKLIB_PATH}/src/rtklib.h
     ${RTKLIB_PATH}/src/rcv/unicore.c)
 
 add_library(rtk STATIC ${RTKLIB_SOURCES})
+target_compile_options(rtk PRIVATE -fPIC)
 target_compile_definitions(rtk PRIVATE ENAGLO ENAGAL ENAQZS ENACMP ENAIRN TRACE NFREQ=3 NEXOBS=3 SVR_REUSEADDR)
 set_property(TARGET rtk PROPERTY C_STANDARD 99)
 target_include_directories(rtk PUBLIC ${RTKLIB_PATH}/src)
@@ -77,3 +78,5 @@ add_executable(${EXECUTABLE_NAME_2}
 
 target_link_libraries(${EXECUTABLE_NAME_1} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
 target_link_libraries(${EXECUTABLE_NAME_2} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
+
+target_link_libraries(${SHARED_LIB_NAME} rtk)
