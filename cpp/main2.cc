@@ -30,26 +30,28 @@ int main(int argc, char **argv)
     for (int intrflg=0;!intrflg;) 
     {
         // /* get stream server status */
-        double longitude = 0; 
-        double latitude = 0;
-        double altitude = 0;
+        long double longitude = 0; 
+        long double latitude = 0;
+        long double altitude = 0;
         int signalToNoiseRatio = 0;
         double horizontalDilutionOfPrecision = 0;
         std::string fixQuality = "";
         int timeStamp = 0;
+        petitpoucet::serverinterface::CoordinateSystem coordSys = petitpoucet::serverinterface::WGSDecimals;
         readerServer.GetCurrentSolution(longitude,
                                             latitude,
                                             altitude, 
                                             signalToNoiseRatio,
-                                            timeStamp);
+                                            timeStamp, 
+                                            coordSys);
         int hour = timeStamp/10000;
         int min = (timeStamp/100)%100;
         int sec = timeStamp%100;
         if(timeStamp)
         {
-            std::cout << "Longitude:"<< std::fixed << std::setprecision(5) << longitude; 
-            std::cout << " | Latitude:"<< std::fixed << std::setprecision(5) << latitude;
-            std::cout << " | Altitude:"<< std::fixed << std::setprecision(1) << altitude;
+            std::cout << "Longitude:"<< std::fixed << std::setprecision(7) << longitude; 
+            std::cout << " | Latitude:"<< std::fixed << std::setprecision(7) << latitude;
+            std::cout << " | Altitude:"<< std::fixed << std::setprecision(2) << altitude;
             std::cout << " | SNR:"<< signalToNoiseRatio;
             std::cout << " | "<< hour << "h "<< min << "m "<< sec << "s" <<std::endl;;
         }
