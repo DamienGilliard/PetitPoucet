@@ -7,6 +7,8 @@
 
 #include <rtklib.h>
 
+#include "../Utils/utils.hh"
+
 namespace petitpoucet::serverinterface
 {
     /*
@@ -32,6 +34,15 @@ namespace petitpoucet::serverinterface
     };
 
     /*
+    @brief Enum for the different coordinate systems
+    */
+   enum CoordinateSystem
+   {
+        WGSDegrees = 0,
+        WGSDecimals = 1
+   };
+
+    /*
     @brief This class stores the options for the PPServer when setup by PPServerInterface::SetupServer
     */
     class PPServerOptions
@@ -45,7 +56,7 @@ namespace petitpoucet::serverinterface
         public:
         int inactiveTimeout = 10000; // 10 000 ms
         int intervalToReconnect = 10000; // 10 000 ms
-        int averagingTimeOfDataRate = 1000; // 1000 ms
+        int averagingTimeOfDataRate = 500; // 500 ms
         int bufferSize = 32768; // 32768 bytes
         int serverCycle = 10; // 10ms
         int NMEARequestCycle = 0; // 0ms = no NMEA requests
@@ -85,7 +96,7 @@ namespace petitpoucet::serverinterface
 
         // Methods
         private:
-        void ReadGNGGASolution(double &longitude, double &latitude, double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp);
+        void ReadGNGGASolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp);
         public:
         /*
         @brief Sets a server up for correcting and reading corrected data
@@ -113,7 +124,7 @@ namespace petitpoucet::serverinterface
         @brief Gets the status of the server and stores it in pointers given as parameters*/
         void GetServerStatus(int *stat, int *log_stat, int *byte, int *bps, std::string *stringMessage);
 
-        void GetCurrentSolution(double &longitude, double &latitude, double &altitude, int &signalToNoiseRatio, int &timeStamp);
+        void GetCurrentSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, int &timeStamp, CoordinateSystem coordinateSystem);
 
         void GetCurrentSolutionQuality(int *signalToNoiseRatio, double *horizontalDilutionOfPrecision, std::string *fixQuality);
     };

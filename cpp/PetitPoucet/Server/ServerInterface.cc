@@ -28,7 +28,7 @@ namespace petitpoucet::serverinterface
         }
     }
 
-    void PPServer::ReadGNGGASolution(double &longitude, double &latitude, double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp)
+    void PPServer::ReadGNGGASolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp)
     {
         std::string line;
         std::stringstream stringStreamedBuffer;
@@ -47,6 +47,17 @@ namespace petitpoucet::serverinterface
                 while (std::getline(stringStreamedLine, item, delimiter))
                 {
                     vectorizedGNSSMessage.push_back(item);
+                }
+                int count = 1;
+                while(vectorizedGNSSMessage[4].size() == 0 && count < 4)
+                {
+                    std::cout << "no coordinates detected from reciever. Waiting 2 seconds ..." << count << "/3" << std::endl;;
+                    sleepms(2000);
+                }
+                if(vectorizedGNSSMessage[4].size() == 0 )
+                {
+                    std::cout << "Still no coordinates detected from reciever. Aborting" ;
+                    EXIT_FAILURE;
                 }
                 longitude = std::stold(vectorizedGNSSMessage[4]);
                 latitude = std::stold(vectorizedGNSSMessage[2]);
@@ -203,7 +214,7 @@ namespace petitpoucet::serverinterface
         *stringMessage = std::string(charMessage);
     }
 
-    void PPServer::GetCurrentSolution(double &longitude, double &latitude, double &altitude, int &signalToNoiseRatio, int &timeStamp)
+    void PPServer::GetCurrentSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, int &timeStamp, CoordinateSystem coordinateSystem)
     {
         double horizontalDilutionOfPrecision;
         std::string fixQuality;
@@ -215,5 +226,11 @@ namespace petitpoucet::serverinterface
                           horizontalDilutionOfPrecision, 
                           fixQuality, 
                           timeStamp);
+
+        if(coordinateSystem == 1)// if we use decimal WGS
+        {
+            longitude = petitpoucet::utils::ConvertNMEAToWGS84Decimal(longitude);
+            latitude = petitpoucet::utils::ConvertNMEAToWGS84Decimal(latitude);
+        }
     }
 }
