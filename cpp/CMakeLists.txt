@@ -71,12 +71,15 @@ set_target_properties(rtk PROPERTIES LINKER_LANGUAGE C)
 
 set(EXECUTABLE_NAME_1 main1)
 set(EXECUTABLE_NAME_2 main2)
+set(EXECUTABLE_NAME_3 create_time-space_stamp)
 add_executable(${EXECUTABLE_NAME_1}
             main1.cc)
 add_executable(${EXECUTABLE_NAME_2}
             main2.cc)
+add_executable(${EXECUTABLE_NAME_3}
+            create_time-space_stamp.cc)        
 
 target_link_libraries(${EXECUTABLE_NAME_1} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
 target_link_libraries(${EXECUTABLE_NAME_2} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
-
+target_link_libraries(${EXECUTABLE_NAME_3} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
 target_link_libraries(${SHARED_LIB_NAME} rtk)
