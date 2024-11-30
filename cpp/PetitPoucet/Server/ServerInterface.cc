@@ -218,19 +218,34 @@ namespace petitpoucet::serverinterface
     {
         double horizontalDilutionOfPrecision;
         std::string fixQuality;
-
-        ReadGNGGASolution(longitude, 
+        double error = 1;
+        double previousLong = longitude;
+        double previousLat = latitude;
+        while(error > 0.000001 | signalToNoiseRatio < 30)
+        {
+            ReadGNGGASolution(longitude, 
                           latitude, 
                           altitude, 
                           signalToNoiseRatio, 
                           horizontalDilutionOfPrecision, 
                           fixQuality, 
                           timeStamp);
+            error = std::abs(previousLat - latitude + previousLong - longitude);
+            std::cout << "current error = " << error << " and target error = 0.000001" << std::endl;
+            std::cout << "current SNR = " << signalToNoiseRatio << " and target SNR = 30" << std::endl;
+            sleepms(2000);
+            previousLat = latitude;
+            previousLong = longitude;
+
+        }
+
+        
 
         if(coordinateSystem == 1)// if we use decimal WGS
         {
             longitude = petitpoucet::utils::ConvertNMEAToWGS84Decimal(longitude);
             latitude = petitpoucet::utils::ConvertNMEAToWGS84Decimal(latitude);
         }
+
     }
 }
