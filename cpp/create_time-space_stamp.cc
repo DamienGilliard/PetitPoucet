@@ -34,6 +34,9 @@ int main(int argc, char ** argv)
     int timeStamp = 0;
     petitpoucet::serverinterface::CoordinateSystem coordSys = petitpoucet::serverinterface::WGSDecimals;
 
+    std::cout << "Waiting 1 second..." << std::endl;
+    sleepms(1000);
+    
     while(timeStamp == 0)
     {
         readerServer.GetCurrentSolution(longitude,
