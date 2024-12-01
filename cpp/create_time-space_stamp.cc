@@ -28,6 +28,8 @@ int main(int argc, char ** argv)
     long double longitude = 0;
     long double latitude = 0;
     long double altitude = 0;
+    double long UTMX = 0;
+    double long UTMY = 0;
     int signalToNoiseRatio = 0;
     double horizontalDilutionOfPrecision = 0;
     std::string fixQuality = "";
@@ -59,6 +61,11 @@ int main(int argc, char ** argv)
         std::cout << " | SNR:"<< signalToNoiseRatio;
         std::cout << " | "<< hour << "h "<< min << "m "<< sec << "s" <<std::endl;;
     }
+
+    // Convert to UTM
+    petitpoucet::utils::ConvertDecimalWGS84ToUTM(longitude, latitude, UTMX, UTMY);
+    std::cout << "UTM X: " << UTMX << " | UTM Y: " << UTMY << std::endl;
+    
     // Save to file
     std::string filename = "position" + std::to_string(hour) + "h" + std::to_string(min) + "m" + std::to_string(sec) + "s.petitpoucet"; 
     std::ofstream outfile(filename);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math.h>
+
 namespace petitpoucet::utils
 {
     /*
@@ -22,4 +24,16 @@ namespace petitpoucet::utils
                                    double &newAltitudeDegrees,
                                    double &newAltitudeMinutes,
                                    double &newAltitudeSeconds);
+    
+    /*
+    @brief converts decimal WGS84 coordinates to UTM coordinates in meters
+
+    @param longitude the longitude in decimal degree format
+    @param latitude the latitude in decimal degree format
+    @param utmX the UTM X coordinate in meters
+    */
+    void ConvertDecimalWGS84ToUTM(double longitude,     
+                                  double latitude,
+                                  double &utmX,
+                                  double &utmY);
 }
