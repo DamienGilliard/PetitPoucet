@@ -1,3 +1,9 @@
 [submodule "cpp/deps/RTKLIB"]
 	path = cpp/deps/RTKLIB
 	url = https://github.com/DamienGilliard/RTKLIB.git
+[submodule "cpp/deps/gtkmm"]
+	path = cpp/deps/gtkmm
+	url = https://gitlab.gnome.org/GNOME/gtkmm.git
+[submodule "cpp/deps/qt5"]
+	path = cpp/deps/qt5
+	url = git@github.com:qt/qt5.git
