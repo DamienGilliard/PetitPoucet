@@ -1,3 +1,6 @@
 [submodule "cpp/deps/RTKLIB"]
 	path = cpp/deps/RTKLIB
 	url = https://github.com/DamienGilliard/RTKLIB.git
+[submodule "deps/imgui"]
+	path = deps/imgui
+	url = https://github.com/ocornut/imgui.git
