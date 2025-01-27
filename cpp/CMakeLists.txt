@@ -65,6 +65,10 @@ set_property(TARGET rtk PROPERTY C_STANDARD 99)
 target_include_directories(rtk PUBLIC ${RTKLIB_PATH}/src)
 set_target_properties(rtk PROPERTIES LINKER_LANGUAGE C)
 
+# FTXUI
+set(FTXUI_ENABLE_INSTALL OFF CACHE BOOL "Disable FTXUI installation") # Because we don't need FTXUI system-wide
+add_subdirectory(deps/ftxui)
+
 ############
 # Executable
 ############
@@ -79,7 +83,7 @@ add_executable(${EXECUTABLE_NAME_2}
 add_executable(${EXECUTABLE_NAME_3}
             create_time-space_stamp.cc)        
 
-target_link_libraries(${EXECUTABLE_NAME_1} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
-target_link_libraries(${EXECUTABLE_NAME_2} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
-target_link_libraries(${EXECUTABLE_NAME_3} ${SHARED_LIB_NAME} rtk pthread) #RTKLIB depends on pthread
-target_link_libraries(${SHARED_LIB_NAME} rtk)
+target_link_libraries(${EXECUTABLE_NAME_1} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
+target_link_libraries(${EXECUTABLE_NAME_2} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
+target_link_libraries(${EXECUTABLE_NAME_3} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
+target_link_libraries(${SHARED_LIB_NAME} rtk ftxui::screen ftxui::dom ftxui::component)
