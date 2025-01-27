@@ -4,6 +4,7 @@
 #include <array>
 #include <sstream>
 #include <vector>
+#include <iomanip>
 
 #include <rtklib.h>
 
@@ -96,7 +97,14 @@ namespace petitpoucet::serverinterface
 
         // Methods
         private:
+        /*
+        @brief reads the serial output os the reciever, extracts the relevant NMEA sentence and structures it
+        */
         void ReadGNGGASolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp);
+        /*
+        @brief reads the serial output os the reciever, extracts the relevant NMEA sentence and structures it
+        */
+        void ReadGNRMCSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp);
         public:
         /*
         @brief Sets a server up for correcting and reading corrected data

@@ -219,8 +219,8 @@ namespace petitpoucet::serverinterface
         double horizontalDilutionOfPrecision;
         std::string fixQuality;
         double error = 1;
-        double previousLong = longitude;
-        double previousLat = latitude;
+        long double previousLong = 0;
+        long double previousLat = 0;
         while(error > 0.000001 | signalToNoiseRatio < 30)
         {
             ReadGNGGASolution(longitude, 
@@ -231,14 +231,15 @@ namespace petitpoucet::serverinterface
                           fixQuality, 
                           timeStamp);
             error = std::abs(previousLat - latitude + previousLong - longitude);
-            std::cout << "current error = " << error << " and target error = 0.000001" << std::endl;
+            std::cout << "HDoP: " << horizontalDilutionOfPrecision << std::endl;
+            std::cout << "current error = "<< std::fixed << std::setprecision(7) << error << " and target error = 0.000001" << std::endl;
             std::cout << "current SNR = " << signalToNoiseRatio << " and target SNR = 30" << std::endl;
-            sleepms(2000);
+            std::cout << "fix quality: " << fixQuality << std::endl;
+            sleepms(200);
             previousLat = latitude;
             previousLong = longitude;
 
         }
-
         
 
         if(coordinateSystem == 1)// if we use decimal WGS

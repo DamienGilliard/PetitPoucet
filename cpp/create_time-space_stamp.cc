@@ -28,8 +28,8 @@ int main(int argc, char ** argv)
     long double longitude = 0;
     long double latitude = 0;
     long double altitude = 0;
-    double long UTMX = 0;
-    double long UTMY = 0;
+    double UTMX;
+    double UTMY;
     int signalToNoiseRatio = 0;
     double horizontalDilutionOfPrecision = 0;
     std::string fixQuality = "";
@@ -63,7 +63,11 @@ int main(int argc, char ** argv)
     }
 
     // Convert to UTM
-    petitpoucet::utils::ConvertDecimalWGS84ToUTM(longitude, latitude, UTMX, UTMY);
+    double dlongitude = M_PI*longitude/180;
+    double dlatitude = M_PI*latitude/180;
+
+    std::cout << dlongitude << std::endl;
+    petitpoucet::utils::ConvertDecimalWGS84ToUTM(dlongitude, dlatitude, UTMX, UTMY);
     std::cout << "UTM X: " << UTMX << " | UTM Y: " << UTMY << std::endl;
     
     // Save to file

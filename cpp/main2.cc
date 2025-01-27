@@ -47,6 +47,7 @@ int main(int argc, char **argv)
         int hour = timeStamp/10000;
         int min = (timeStamp/100)%100;
         int sec = timeStamp%100;
+        std::cout << timeStamp << std::endl;
         if(timeStamp)
         {
             std::cout << "Longitude:"<< std::fixed << std::setprecision(7) << longitude; 
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
             std::cout << " | SNR:"<< signalToNoiseRatio;
             std::cout << " | "<< hour << "h "<< min << "m "<< sec << "s" <<std::endl;;
         }
-        sleepms(500);
+        sleepms(5000);
     }
     return 0;
 }
