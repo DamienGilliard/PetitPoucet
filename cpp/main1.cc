@@ -3,16 +3,16 @@
 #include <fstream>
 #include <memory>
 #include "PetitPoucet.hh"
-
+#include <chrono>
 
 
 int main(int argc, char **argv)
 {
     std::string configFileName = "../config.txt";
     std::string casterName;
-    std::string serialPortName;
-
-    int readConfigFile = petitpoucet::ui::giveChoiceTwoOptions("Read from config file", " Define myself at runtime", "Do you want to use a config file or define the parameters yourself?");
+    std::string serialPortName, serialPortNamecopy;
+    std::string readConfigFileMessage = "Do you want to use a config file or define the parameters yourself?";
+    int readConfigFile = petitpoucet::ui::giveChoiceTwoOptions("Read from config file", " Define myself at runtime", readConfigFileMessage);
 
     if(readConfigFile == 1)
     {
@@ -24,27 +24,14 @@ int main(int argc, char **argv)
         petitpoucet::ui::configfromUserInput(casterName, serialPortName);
     }
 
-    int justInstantaneous = petitpoucet::ui::giveChoiceTwoOptions("Instantaneous", "Over time", "Do you want to get instantaneous position or position over time?");
+    std::string messageForInstantaneous = "Do you want to get instantaneous position or position over time?";
+    int justInstantaneous = petitpoucet::ui::giveChoiceTwoOptions("Instantaneous", "Over time", messageForInstantaneous);
 
-    if(justInstantaneous == 1)
-    {
-        
-    }
-    else if(justInstantaneous == 0)
-    {
-        std::cout << "Getting position over time" << std::endl;
-    }
-
-    // Create the server
+    int stat[3] = {0}, log_stat[3] = {0}, byte[3] = {0}, bps[3] = {0};
+    std::string stringMessage;
     petitpoucet::serverinterface::PPServerOptions options;
-    petitpoucet::serverinterface::PPServer correctionServer = petitpoucet::serverinterface::PPServer::SetupCorrectionServer(&casterName, &serialPortName, options);
- 
-    // get server status at regular interval
-    for (int intrflg=0;!intrflg;) {
-        int stat[3] = {0}, log_stat[3] = {0}, byte[3] = {0}, bps[3] = {0};
-        std::string stringMessage;
-        correctionServer.GetServerStatus(stat, log_stat, byte, bps, &stringMessage);
-        std::cout << "server running. | bytes: " << *byte << "| bps: " << *bps << "| source (0) destination (1):" << stringMessage << std::endl;
-        sleepms(5000);
-    }
+
+    petitpoucet::ui::interfaceForInstantaneousPosition(30, options, casterName, serialPortName);
+
+    return 0;
 }
