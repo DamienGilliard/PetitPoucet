@@ -2,7 +2,7 @@
 
 namespace petitpoucet::serverinterface
 {
-   void ConfigurationSetup::ReadConfigFile(std::string configFileName, std::string *casterName, std::string *serialPortName)
+    void ConfigurationSetup::ReadConfigFile(std::string configFileName, std::string *casterName, std::string *serialPortName)
     {
         std::ifstream configFile(configFileName);
         std::string line;
@@ -221,32 +221,24 @@ namespace petitpoucet::serverinterface
         double error = 1;
         long double previousLong = 0;
         long double previousLat = 0;
-        while(error > 0.000001 | signalToNoiseRatio < 30)
-        {
-            ReadGNGGASolution(longitude, 
-                          latitude, 
-                          altitude, 
-                          signalToNoiseRatio, 
-                          horizontalDilutionOfPrecision, 
-                          fixQuality, 
-                          timeStamp);
-            error = std::abs(previousLat - latitude + previousLong - longitude);
-            std::cout << "HDoP: " << horizontalDilutionOfPrecision << std::endl;
-            std::cout << "current error = "<< std::fixed << std::setprecision(7) << error << " and target error = 0.000001" << std::endl;
-            std::cout << "current SNR = " << signalToNoiseRatio << " and target SNR = 30" << std::endl;
-            std::cout << "fix quality: " << fixQuality << std::endl;
-            sleepms(200);
-            previousLat = latitude;
-            previousLong = longitude;
 
-        }
-        
+        // Perform a single read operation
+        this->ReadGNGGASolution(longitude, 
+                                latitude, 
+                                altitude, 
+                                signalToNoiseRatio, 
+                                horizontalDilutionOfPrecision, 
+                                fixQuality, 
+                                timeStamp);
 
-        if(coordinateSystem == 1)// if we use decimal WGS
+        error = std::abs(previousLat - latitude + previousLong - longitude);
+        previousLat = latitude;
+        previousLong = longitude;
+
+        if(coordinateSystem == 1) // if we use decimal WGS
         {
             longitude = petitpoucet::utils::ConvertNMEAToWGS84Decimal(longitude);
             latitude = petitpoucet::utils::ConvertNMEAToWGS84Decimal(latitude);
         }
-
     }
 }

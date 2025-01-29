@@ -37,11 +37,11 @@ namespace petitpoucet::serverinterface
     /*
     @brief Enum for the different coordinate systems
     */
-   enum CoordinateSystem
-   {
-        WGSDegrees = 0,
-        WGSDecimals = 1
-   };
+    enum CoordinateSystem
+    {
+         WGSDegrees = 0,
+         WGSDecimals = 1
+    };
 
     /*
     @brief This class stores the options for the PPServer when setup by PPServerInterface::SetupServer

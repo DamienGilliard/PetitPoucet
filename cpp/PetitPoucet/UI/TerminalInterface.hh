@@ -1,12 +1,20 @@
 #include <string>  // for operator+, to_string
 #include <iostream>
+#include <fstream>
+#include <atomic>
+#include <chrono>
+#include <mutex>
+#include <thread>
+
 #include "ftxui/component/captured_mouse.hpp"
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp" 
 #include "ftxui/component/component_options.hpp"
 #include "ftxui/component/screen_interactive.hpp" 
 #include "ftxui/dom/elements.hpp" 
-#include "ftxui/screen/color.hpp"  
+#include "ftxui/screen/color.hpp"
+
+#include "../Server/ServerInterface.hh"
 
 namespace petitpoucet::ui
 {   
@@ -19,11 +27,15 @@ namespace petitpoucet::ui
     // @param option1 The first option.
     // @param option2 The second option.
     // @param message The message to display to the user to explain the choice presented.
-    int giveChoiceTwoOptions(std::string option1, std::string option2, std::string message);
+    int giveChoiceTwoOptions(std::string option1, std::string option2, std::string &message);
 
     // @brief User interface for getting the instantaneous position.
     // @param allowableSNR The minimum signal to noise ratio to trigger the instantaneous position recording.
-    void interfaceForInstantaneousPosition( int minimumSNR = 30);
+    void interfaceForInstantaneousPosition(int minimumSNR, petitpoucet::serverinterface::PPServerOptions options, std::string casterName, std::string serialPortName);
+
+    // @brief User is prompted a trigger button. 
+    // @param messageForTrigger The message to display to the user to explain the consequence of the trigger.
+    void waitThenTriggerProcess(std::string messageForTrigger);
 
     // @brief The width of the window.
     int WINDOW_WIDTH = 80;
