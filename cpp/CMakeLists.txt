@@ -73,17 +73,9 @@ add_subdirectory(deps/ftxui)
 # Executable
 ############
 
-set(EXECUTABLE_NAME_1 main1)
-set(EXECUTABLE_NAME_2 main2)
-set(EXECUTABLE_NAME_3 create_time-space_stamp)
+set(EXECUTABLE_NAME_1 petitpoucet_executable)
 add_executable(${EXECUTABLE_NAME_1}
-            main1.cc)
-add_executable(${EXECUTABLE_NAME_2}
-            main2.cc)
-add_executable(${EXECUTABLE_NAME_3}
-            create_time-space_stamp.cc)        
+            main1.cc)       
 
 target_link_libraries(${EXECUTABLE_NAME_1} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
-target_link_libraries(${EXECUTABLE_NAME_2} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
-target_link_libraries(${EXECUTABLE_NAME_3} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
 target_link_libraries(${SHARED_LIB_NAME} rtk ftxui::screen ftxui::dom ftxui::component)
