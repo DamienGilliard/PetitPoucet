@@ -7,7 +7,12 @@ namespace petitpoucet::utils
     /*
     @brief converts the raw NMEA coordinates (DDMM.MMMMMM) to decimal format (DD.DDDDDDDDD)
     */
-    double ConvertNMEAToWGS84Decimal(double coordinate);
+    void ConvertNMEAToWGS84Decimal(long double &coordinate);
+
+    /*
+    @brief converts the raw NMEA coordinates (DDMM.MMMMMM) to degrees format (DD)
+    */
+    void ConvertNMEAToWGS84Degrees(long double &coordinate);
 
     /*
     @brief converts the raw NMEA  (DDMM.MMMMMM) to degrees, minutes and seconds

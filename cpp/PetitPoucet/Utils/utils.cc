@@ -2,12 +2,16 @@
 
 namespace petitpoucet::utils
 {
-    double ConvertNMEAToWGS84Decimal(double coordinate)
+    void ConvertNMEAToWGS84Decimal(long double &coordinate)
     {
-        int degreeCoordinate = coordinate / 100;
-        long double restCoordinate = coordinate - (100 * degreeCoordinate);
-        long double newCoordinateDecimals = degreeCoordinate + (restCoordinate/60);
-        return newCoordinateDecimals;
+        int degreeCoordinate = coordinate/100;
+        coordinate = degreeCoordinate + (((coordinate/100 -  degreeCoordinate)/60) * 100);
+    }
+
+    void ConvertNMEAToWGS84Degrees(long double &coordinate)
+    {
+        int degreeCoordinate = coordinate/100;
+        coordinate = degreeCoordinate;
     }
 
     void ConvertDecimalWGS84ToUTM(double longitude,     
