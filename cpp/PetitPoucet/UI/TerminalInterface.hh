@@ -5,6 +5,9 @@
 #include <chrono>
 #include <mutex>
 #include <thread>
+#include <numeric> 
+#include <vector>
+
 
 #include "ftxui/component/captured_mouse.hpp"
 #include "ftxui/component/component.hpp"
@@ -31,7 +34,19 @@ namespace petitpoucet::ui
 
     // @brief User interface for getting the instantaneous position.
     // @param allowableSNR The minimum signal to noise ratio to trigger the instantaneous position recording.
-    void interfaceForInstantaneousPosition(int minimumSNR, petitpoucet::serverinterface::PPServerOptions options, std::string casterName, std::string serialPortName);
+    // @param options The options for the server.
+    // @param casterName The name of the caster.
+    // @param serialPortName The name of the serial port.
+    // @param coordinateSystem The coordinate system to use.
+    void interfaceForInstantaneousPosition(int minimumSNR, petitpoucet::serverinterface::PPServerOptions options, std::string casterName, std::string serialPortName, petitpoucet::serverinterface::CoordinateSystem coordinateSystem);
+
+    // @brief User interface for getting the position over time, where the user triggers and stops the measurment.
+    // @param minimumSNR The minimum signal to noise ratio to trigger the instantaneous position recording.
+    // @param options The options for the server.
+    // @param casterName The name of the caster.
+    // @param serialPortName The name of the serial port.
+    // @param coordinateSystem The coordinate system to use.
+    void interfaceForPositionOverTime(int minimumSNR, petitpoucet::serverinterface::PPServerOptions options, std::string casterName, std::string serialPortName, petitpoucet::serverinterface::CoordinateSystem coordinateSystem);
 
     // @brief User is prompted a trigger button. 
     // @param messageForTrigger The message to display to the user to explain the consequence of the trigger.
