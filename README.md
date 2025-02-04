@@ -1,15 +1,12 @@
 # PetitPoucet
-PetitPoucet is a small executable creating a ply point cloud in world coordinate references and a .gpx file from a .fit file, from example from a bike gps or smartwatch.
+PetitPoucet is a small library that allows to record geolocations using RTK corrections.
+A small executable is proposed, with a simple terminal user interface allows some user-friendly basic choices.
 
-The initial usecase is to create maps of unreferenced paths in forests.
+The initial usecase is to geolocate point clouds in forests.
 
-![alt text](https://github.com/DamienGilliard/PetitPoucet/blob/main/path_pointcloud.png?raw=true)
-
-The gpx file can be uploaded to openstreetmaps via the [openstreetmap website](https://www.openstreetmap.org/traces)
 ## Dependencies
-we use :
-* [fitparse](https://pythonhosted.org/fitparse/) 
-* [laspy](https://laspy.readthedocs.io/en/latest/index.html)
+we use two submodules:
+    > [RTKLIB](https://github.com/DamienGilliard/RTKLIB)
+    > [FTXUI](https://github.com/ArthurSonzogni/FTXUI)
 
-## Note: 
-consumer devices record gpx data at a low resolution (every 10-15s on a bicycle), and might not be fit for all applications.
+Additionally, building the code requires CMake 3.12 minimum
