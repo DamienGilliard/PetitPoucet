@@ -30,8 +30,15 @@ int main(int argc, char **argv)
     int stat[3] = {0}, log_stat[3] = {0}, byte[3] = {0}, bps[3] = {0};
     std::string stringMessage;
     petitpoucet::serverinterface::PPServerOptions options;
+    petitpoucet::serverinterface::CoordinateSystem coordinateSystem = petitpoucet::serverinterface::CoordinateSystem::WGSDecimals;
 
-    petitpoucet::ui::interfaceForInstantaneousPosition(30, options, casterName, serialPortName);
-
+    if(justInstantaneous)
+    {
+        petitpoucet::ui::interfaceForInstantaneousPosition(30, options, casterName, serialPortName, coordinateSystem);
+    }
+    else
+    {
+        petitpoucet::ui::interfaceForPositionOverTime(30, options, casterName, serialPortName, coordinateSystem);
+    }
     return 0;
 }
