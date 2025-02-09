@@ -6,6 +6,7 @@
 #include <chrono>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 void runCorrectionServer()
     {
@@ -59,6 +60,7 @@ int main(int argc, char **argv)
         {
             petitpoucet::ui::interfaceForPositionOverTime(30, options, casterName, serialPortName, coordinateSystem);
         }
+        kill(pid, SIGTERM);
     }
     return 0;
 }
