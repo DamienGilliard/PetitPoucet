@@ -71,43 +71,28 @@ namespace petitpoucet::ui
         auto screen = ftxui::ScreenInteractive::Fullscreen();
         std::atomic<bool> running(true);
         std::string staticMessage = "Waiting for signal to noise ratio to be above " + std::to_string(minimumSNR);
-        std::string liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime = "initial message";
+        std::string liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime, fixQuality = "initial message";
         int liveHour, liveMin, liveSec;
+        double horizontalDilutionOfPrecision = 0;
         auto messageMutex = std::make_shared<std::mutex>();
 
-        std::thread correctionServerThread([&] {
-            petitpoucet::serverinterface::PPServer correctionServer = petitpoucet::serverinterface::PPServer::SetupCorrectionServer(&casterName, &serialPortName, options);
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            while (running) {
-                int stat[3] = {0}, log_stat[3] = {0}, byte[3] = {0}, bps[3] = {0};
-                std::string stringMessage;
-                correctionServer.GetServerStatus(stat, log_stat, byte, bps, &stringMessage);
-                {
-                    std::lock_guard<std::mutex> lock(*messageMutex);
-                    liveMessage = "Correction server bytes: " + std::to_string(*byte);
-                }
-                screen.PostEvent(ftxui::Event::Custom);
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            }
-        });
-
-        std::thread positionServerThread([&] {
+        std::thread positionServerThread([&] 
+        {
             petitpoucet::serverinterface::PPServer readerServer = petitpoucet::serverinterface::PPServer::SetupReaderServer(&serialPortName, options);
-            std::this_thread::sleep_for(std::chrono::milliseconds(1500));
             while (running) {
                 long double longitude = 0;
                 long double latitude = 0;
                 long double altitude = 0;
                 int signalToNoiseRatio = 0;
-                double horizontalDilutionOfPrecision = 0;
-                std::string fixQuality = "";
                 int timeStamp = 0;
                 readerServer.GetCurrentSolution(longitude,
                                                 latitude,
                                                 altitude,
                                                 signalToNoiseRatio,
                                                 timeStamp,
-                                                coordinateSystem);
+                                                coordinateSystem,
+                                                horizontalDilutionOfPrecision,
+                                                fixQuality);
                 int hour = timeStamp / 10000;
                 int min = (timeStamp / 100) % 100;
                 int sec = timeStamp % 100;
@@ -160,7 +145,7 @@ namespace petitpoucet::ui
             return ftxui::vbox({
                 ftxui::vbox({
                     ftxui::text(liveTime),
-                    ftxui::text(liveMessage),
+                    ftxui::text(fixQuality),
                     ftxui::text(SNRMessage),
                     ftxui::hbox({
                         ftxui::vbox({
@@ -182,7 +167,6 @@ namespace petitpoucet::ui
         });
         screen.Loop(component);
         running = false;
-        correctionServerThread.join();
         positionServerThread.join();
 
     }
@@ -192,54 +176,45 @@ namespace petitpoucet::ui
         auto screen = ftxui::ScreenInteractive::Fullscreen();
         std::atomic<bool> running(true);
         std::string staticMessage = "Waiting for signal to noise ratio to be above " + std::to_string(minimumSNR);
-        std::string liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime = "initial message";
+        std::string liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime, liveFixQuality = "initial message";
         std::vector<long double> longitudes, latitudes, altitudes;
         std::vector<int> signalToNoiseRatios;
         bool recording = false;
 
-        long double meanLongitude, meanLatitude, meanAltitude = 0;
+        long double meanLongitude, meanLatitude, meanAltitude, liveHorizontalDilutionOfPrecision = 0;
         int meanSignalToNoiseRatio = 0;
         long double stdDevLongitude, stdDevLatitude, stdDevAltitude = 0;
         int stdDevSignalToNoiseRatio = 0;  
         int liveHour, liveMin, liveSec;
         auto messageMutex = std::make_shared<std::mutex>();
 
-        std::thread correctionServerThread([&] {
-            petitpoucet::serverinterface::PPServer correctionServer = petitpoucet::serverinterface::PPServer::SetupCorrectionServer(&casterName, &serialPortName, options);
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            while (running) {
-                int stat[3] = {0}, log_stat[3] = {0}, byte[3] = {0}, bps[3] = {0};
-                std::string stringMessage;
-                correctionServer.GetServerStatus(stat, log_stat, byte, bps, &stringMessage);
-                {
-                    std::lock_guard<std::mutex> lock(*messageMutex);
-                    liveMessage = "Correction server bytes: " + std::to_string(*byte);
-                }
-                screen.PostEvent(ftxui::Event::Custom);
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            }
-        });
-
         std::thread positionServerThread([&] {
             petitpoucet::serverinterface::PPServer readerServer = petitpoucet::serverinterface::PPServer::SetupReaderServer(&serialPortName, options);
-            std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 
             while (running) {
                 long double longitude, latitude, altitude = 0;
-                int signalToNoiseRatio = 0;
                 double horizontalDilutionOfPrecision = 0;
-                std::string fixQuality = "";
+                int signalToNoiseRatio = 0;
                 int timeStamp = 0;
+                std::string fixQuality = "";
                 readerServer.GetCurrentSolution(longitude,
                                                 latitude,
                                                 altitude,
                                                 signalToNoiseRatio,
                                                 timeStamp,
-                                                coordinateSystem);
+                                                coordinateSystem,
+                                                horizontalDilutionOfPrecision,
+                                                fixQuality);
 
                 int hour = timeStamp / 10000;
                 int min = (timeStamp / 100) % 100;
                 int sec = timeStamp % 100;
+
+                if(horizontalDilutionOfPrecision)
+                {
+                    liveHorizontalDilutionOfPrecision = horizontalDilutionOfPrecision;
+                    liveFixQuality = fixQuality;
+                }
 
                 if(timeStamp)
                 {
@@ -342,7 +317,7 @@ namespace petitpoucet::ui
             return ftxui::vbox({
                 ftxui::vbox({
                     ftxui::text(liveTime),
-                    ftxui::text(liveMessage),
+                    ftxui::text(liveFixQuality),
                     ftxui::text(SNRMessage),
                     ftxui::hbox({
                         ftxui::vbox({
@@ -406,7 +381,6 @@ namespace petitpoucet::ui
         });
         screen.Loop(component);
         running = false;
-        correctionServerThread.join();
         positionServerThread.join();
 
     }
