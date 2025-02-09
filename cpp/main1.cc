@@ -4,7 +4,14 @@
 #include <memory>
 #include "PetitPoucet.hh"
 #include <chrono>
+#include <unistd.h>
+#include <sys/wait.h>
 
+void runCorrectionServer()
+    {
+        execl("./correction_server", "./correction_server", NULL);
+        std::cerr << "execl() failed!\n";
+    }
 
 int main(int argc, char **argv)
 {
@@ -32,13 +39,26 @@ int main(int argc, char **argv)
     petitpoucet::serverinterface::PPServerOptions options;
     petitpoucet::serverinterface::CoordinateSystem coordinateSystem = petitpoucet::serverinterface::CoordinateSystem::WGSDecimals;
 
-    if(justInstantaneous)
+    pid_t pid = fork();
+
+    if(pid < 0) 
     {
-        petitpoucet::ui::interfaceForInstantaneousPosition(30, options, casterName, serialPortName, coordinateSystem);
+        std::cerr << "Fork failed!\n";
+    }
+    if(pid == 0)
+    {
+        runCorrectionServer();
     }
     else
     {
-        petitpoucet::ui::interfaceForPositionOverTime(30, options, casterName, serialPortName, coordinateSystem);
+        if(justInstantaneous)
+        {
+            petitpoucet::ui::interfaceForInstantaneousPosition(30, options, casterName, serialPortName, coordinateSystem);
+        }
+        else
+        {
+            petitpoucet::ui::interfaceForPositionOverTime(30, options, casterName, serialPortName, coordinateSystem);
+        }
     }
     return 0;
 }

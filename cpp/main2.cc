@@ -24,39 +24,14 @@ int main(int argc, char **argv)
     petitpoucet::serverinterface::PPServerOptions options;
 
     // Create the server
-    petitpoucet::serverinterface::PPServer readerServer = petitpoucet::serverinterface::PPServer::SetupReaderServer(&serialPortName,options);
-
-    sleepms(1000);
+    petitpoucet::serverinterface::PPServer correctionServer = petitpoucet::serverinterface::PPServer::SetupCorrectionServer(&casterName, &serialPortName,options);
+    sleepms(300);
     for (int intrflg=0;!intrflg;) 
     {
-        // /* get stream server status */
-        long double longitude = 0; 
-        long double latitude = 0;
-        long double altitude = 0;
-        int signalToNoiseRatio = 0;
-        double horizontalDilutionOfPrecision = 0;
-        std::string fixQuality = "";
-        int timeStamp = 0;
-        petitpoucet::serverinterface::CoordinateSystem coordSys = petitpoucet::serverinterface::WGSDecimals;
-        readerServer.GetCurrentSolution(longitude,
-                                            latitude,
-                                            altitude, 
-                                            signalToNoiseRatio,
-                                            timeStamp, 
-                                            coordSys);
-        int hour = timeStamp/10000;
-        int min = (timeStamp/100)%100;
-        int sec = timeStamp%100;
-        std::cout << timeStamp << std::endl;
-        if(timeStamp)
-        {
-            std::cout << "Longitude:"<< std::fixed << std::setprecision(7) << longitude; 
-            std::cout << " | Latitude:"<< std::fixed << std::setprecision(7) << latitude;
-            std::cout << " | Altitude:"<< std::fixed << std::setprecision(2) << altitude;
-            std::cout << " | SNR:"<< signalToNoiseRatio;
-            std::cout << " | "<< hour << "h "<< min << "m "<< sec << "s" <<std::endl;;
-        }
-        sleepms(5000);
+        int stat[3] = {0}, log_stat[3] = {0}, byte[3] = {0}, bps[3] = {0};
+        std::string stringMessage;
+        correctionServer.GetServerStatus(stat, log_stat, byte, bps, &stringMessage);
+        sleepms(1000);
     }
     return 0;
 }
