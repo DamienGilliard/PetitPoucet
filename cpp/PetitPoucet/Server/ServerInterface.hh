@@ -132,9 +132,8 @@ namespace petitpoucet::serverinterface
         @brief Gets the status of the server and stores it in pointers given as parameters*/
         void GetServerStatus(int *stat, int *log_stat, int *byte, int *bps, std::string *stringMessage);
 
-        void GetCurrentSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, int &timeStamp, CoordinateSystem coordinateSystem);
+        void GetCurrentSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, int &timeStamp, CoordinateSystem coordinateSystem, double &horizontalDilutionOfPrecision, std::string &fixQuality);
 
-        void GetCurrentSolutionQuality(int *signalToNoiseRatio, double *horizontalDilutionOfPrecision, std::string *fixQuality);
     };
 
     class PPServerInterface

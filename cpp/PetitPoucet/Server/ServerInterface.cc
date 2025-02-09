@@ -166,8 +166,8 @@ namespace petitpoucet::serverinterface
 
         static char s1[3][MAXSTRPATH]={{0}};
         static char s2[3][MAXSTRPATH]={{0}};
-        static char cmd_strs[3][MAXRCVCMD]={"",""};
-        static char cmd_periodic_strs[3][MAXRCVCMD]={"",""};
+        static char cmd_strs[3][MAXRCVCMD]={"","",""};
+        static char cmd_periodic_strs[3][MAXRCVCMD]={"","",""};
         char *paths[3] = {0};
         int types[3] = {STR_SERIAL, STR_NONE};
         char *logs[3] = {0};
@@ -214,10 +214,8 @@ namespace petitpoucet::serverinterface
         *stringMessage = std::string(charMessage);
     }
 
-    void PPServer::GetCurrentSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, int &timeStamp, CoordinateSystem coordinateSystem)
+    void PPServer::GetCurrentSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, int &timeStamp, CoordinateSystem coordinateSystem, double &horizontalDilutionOfPrecision, std::string &fixQuality)
     {
-        double horizontalDilutionOfPrecision;
-        std::string fixQuality;
         double error = 1;
         long double previousLong = 0;
         long double previousLat = 0;
