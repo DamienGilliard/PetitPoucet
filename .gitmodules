@@ -1,6 +1,6 @@
-[submodule "cpp/deps/RTKLIB"]
-	path = cpp/deps/RTKLIB
+[submodule "src/deps/RTKLIB"]
+	path = src/deps/RTKLIB
 	url = https://github.com/DamienGilliard/RTKLIB.git
-[submodule "cpp/deps/ftxui"]
-	path = cpp/deps/ftxui
+[submodule "src/deps/ftxui"]
+	path = src/deps/ftxui
 	url = https://github.com/ArthurSonzogni/FTXUI.git
