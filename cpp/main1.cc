@@ -35,8 +35,6 @@ int main(int argc, char **argv)
     std::string messageForInstantaneous = "Do you want to get instantaneous position or position over time?";
     int justInstantaneous = petitpoucet::ui::giveChoiceTwoOptions("Instantaneous", "Over time", messageForInstantaneous);
 
-    int stat[3] = {0}, log_stat[3] = {0}, byte[3] = {0}, bps[3] = {0};
-    std::string stringMessage;
     petitpoucet::serverinterface::PPServerOptions options;
     petitpoucet::serverinterface::CoordinateSystem coordinateSystem = petitpoucet::serverinterface::CoordinateSystem::WGSDecimals;
 
