@@ -12,3 +12,6 @@
 # generated files
 build/
 cpp/build/
+
+# apple's junk
+.DS_Store
