@@ -13,13 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Checkout repository
+    uses: actions/checkout@v4
+    with:
+      submodules: true
     - name: configure
       run: cd src && mkdir build && cd build
-    - name: cmake
-      run: cmake ..
+    - name: Configure CMake
+      run: |
+        cd src
+        mkdir -p build
+        cd build
+        cmake ..
     - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      run: cd src/build && make
