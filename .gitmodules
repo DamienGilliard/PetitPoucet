@@ -1,6 +1,0 @@
-[submodule "src/deps/RTKLIB"]
-	path = src/deps/RTKLIB
-	url = https://github.com/DamienGilliard/RTKLIB.git
-[submodule "src/deps/ftxui"]
-	path = src/deps/ftxui
-	url = https://github.com/ArthurSonzogni/FTXUI.git
