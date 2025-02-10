@@ -1,6 +1,6 @@
-#include "utils.hh"
+#include "Utils.hh"
 
-namespace petitpoucet::utils
+namespace petitpoucet::utils::conversions
 {
     void ConvertNMEAToWGS84Decimal(long double &coordinate)
     {
