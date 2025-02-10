@@ -94,5 +94,5 @@ enable_testing()
 
 add_custom_target(check
   COMMAND ctest --output-on-failure
-  DEPENDS EXECUTABLE_NAME_1
+  DEPENDS ${EXECUTABLE_NAME_1}
 )
