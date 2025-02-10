@@ -13,6 +13,12 @@ if(NOT GIT_SUBMOD_RESULT EQUAL "0")
 endif()
 
 ################################
+# Flags
+################################
+option(BUILD_PETITPOUCET_EXECUTABLES "Build executables" ON)
+
+
+################################
 # Dynamic library of PetitPoucet
 ################################
 
@@ -24,39 +30,14 @@ file(GLOB_RECURSE SOURCES_LIB
 
 add_library(${SHARED_LIB_NAME} SHARED ${SOURCES_LIB})
 target_include_directories(${SHARED_LIB_NAME}
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/PetitPoucet)   
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/PetitPoucet)
 ###################################
 # 3rd party libraries paths
 ###################################
 # RTKLIB
 set(RTKLIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/RTKLIB)
 
-file(GLOB_RECURSE RTKLIB_SOURCES ${RTKLIB_PATH}/src/rtklib.h 
-    ${RTKLIB_PATH}/src/stream.c
-    ${RTKLIB_PATH}/src/streamsvr.c
-    ${RTKLIB_PATH}/src/rtkcmn.c
-    ${RTKLIB_PATH}/src/trace.c
-    ${RTKLIB_PATH}/src/solution.c
-    ${RTKLIB_PATH}/src/sbas.c
-    ${RTKLIB_PATH}/src/geoid.c
-    ${RTKLIB_PATH}/src/rcvraw.c
-    ${RTKLIB_PATH}/src/rcv/novatel.c
-    ${RTKLIB_PATH}/src/rcv/ublox.c
-    ${RTKLIB_PATH}/src/rcv/ss2.c
-    ${RTKLIB_PATH}/src/rcv/crescent.c
-    ${RTKLIB_PATH}/src/rcv/skytraq.c
-    ${RTKLIB_PATH}/src/rcv/javad.c
-    ${RTKLIB_PATH}/src/rcv/nvs.c
-    ${RTKLIB_PATH}/src/rcv/binex.c
-    ${RTKLIB_PATH}/src/rcv/rt17.c
-    ${RTKLIB_PATH}/src/rtcm.c
-    ${RTKLIB_PATH}/src/rtcm2.c
-    ${RTKLIB_PATH}/src/rtcm3.c
-    ${RTKLIB_PATH}/src/rtcm3e.c
-    ${RTKLIB_PATH}/src/preceph.c
-    ${RTKLIB_PATH}/src/rcv/septentrio.c
-    ${RTKLIB_PATH}/src/rcv/swiftnav.c
-    ${RTKLIB_PATH}/src/rcv/unicore.c)
+file(GLOB_RECURSE RTKLIB_SOURCES ${RTKLIB_PATH}/src/*.c ${RTKLIB_PATH}/src/*.h)
 
 add_library(rtk STATIC ${RTKLIB_SOURCES})
 target_compile_options(rtk PRIVATE -fPIC)
@@ -73,6 +54,9 @@ add_subdirectory(deps/ftxui)
 # Executable
 ############
 
+if(NOT BUILD_PETITPOUCET_EXECUTABLES)
+    return()
+endif()
 set(EXECUTABLE_NAME_1 correction_server)
 set(EXECUTABLE_NAME_2 petitpoucet_executable)
 
