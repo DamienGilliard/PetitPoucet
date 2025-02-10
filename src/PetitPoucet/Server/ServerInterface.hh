@@ -16,7 +16,7 @@
 namespace petitpoucet::serverinterface
 {
     /**
-    @brief This class stores the method for reading the confifile
+    @brief This class stores the method for reading the configuration file
     */
     class ConfigurationSetup
     {
@@ -38,7 +38,7 @@ namespace petitpoucet::serverinterface
     };
 
     /**
-    @brief Enum for the different coordinate systems
+    @brief Enum for the different coordinate systems. Destined to be expanded.
     */
     enum CoordinateSystem
     {
@@ -83,6 +83,9 @@ namespace petitpoucet::serverinterface
         };
     };
 
+    /**
+     * @brief This class is the core of PetitPoucet and stores the server as private member as well as methods for creation of server and solution reading.
+     */
     class PPServer
     {
         // Constructor
@@ -105,7 +108,7 @@ namespace petitpoucet::serverinterface
         */
         void ReadGNGGASolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp);
         /**
-        @brief reads the serial output os the reciever, extracts the relevant NMEA sentence and structures it
+        @brief reads the serial output os the reciever, extracts the relevant NMEA sentence and structures it. To be implemented
         */
         void ReadGNRMCSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp);
         public:
@@ -138,13 +141,5 @@ namespace petitpoucet::serverinterface
 
         void GetCurrentSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, int &timeStamp, CoordinateSystem coordinateSystem, double &horizontalDilutionOfPrecision, std::string &fixQuality);
 
-    };
-
-    class PPServerInterface
-    {
-        // Constructor
-        public:
-        PPServerInterface(){}
-        ~PPServerInterface(){};
     };
 }

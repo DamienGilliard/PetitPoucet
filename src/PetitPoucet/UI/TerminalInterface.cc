@@ -45,9 +45,9 @@ namespace petitpoucet::ui
         // The tree of components. This defines how to navigate using the keyboard.
         auto buttons = ftxui::Container::Horizontal({
             ftxui::Button(
-                option1, [&] { answer = 1; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(150, 100, 30))),
+                option1, [&] { answer = 0; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(150, 100, 30))),
             ftxui::Button(
-                option2, [&] { answer = 0; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::Green)),
+                option2, [&] { answer = 1; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::Green)),
         });
         
         // Modify the way to render them on screen:

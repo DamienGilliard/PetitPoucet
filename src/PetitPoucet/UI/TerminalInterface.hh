@@ -32,7 +32,7 @@ namespace petitpoucet::ui
     void configfromUserInput(std::string &casterName, std::string &serialPortName);
 
     /**
-    @brief Function to ask the user to choose between two options.
+    @brief Function to ask the user to choose between two options. If the user chooses the first option, the function returns 0, otherwise it returns 1.
     @param option1 The first option.
     @param option2 The second option.
     @param message The message to display to the user to explain the choice presented.
