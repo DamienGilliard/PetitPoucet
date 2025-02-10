@@ -85,3 +85,14 @@ target_link_libraries(${EXECUTABLE_NAME_1} ${SHARED_LIB_NAME} rtk pthread ftxui:
 target_link_libraries(${EXECUTABLE_NAME_2} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
 
 target_link_libraries(${SHARED_LIB_NAME} rtk ftxui::screen ftxui::dom ftxui::component)
+
+############
+# Testing
+############
+
+enable_testing()
+
+add_custom_target(check
+  COMMAND ctest --output-on-failure
+  DEPENDS EXECUTABLE_NAME_1
+)
