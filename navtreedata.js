@@ -25,9 +25,7 @@
 var NAVTREE =
 [
   [ "Petit Poucet", "index.html", [
-    [ "PetitPoucet", "md_src_2README.html", [
-      [ "Dependencies", "md_src_2README.html#autotoc_md1", null ]
-    ] ],
+    [ "PetitPoucet", "index.html", "index" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['serverinterface_2ecc_0',['ServerInterface.cc',['../ServerInterface_8cc.html',1,'']]],
-  ['serverinterface_2ehh_1',['ServerInterface.hh',['../ServerInterface_8hh.html',1,'']]]
+  ['terminalinterface_2ecc_0',['TerminalInterface.cc',['../TerminalInterface_8cc.html',1,'']]],
+  ['terminalinterface_2ehh_1',['TerminalInterface.hh',['../TerminalInterface_8hh.html',1,'']]]
 ];
