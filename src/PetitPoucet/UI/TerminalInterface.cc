@@ -103,13 +103,13 @@ namespace petitpoucet::ui
                     SNRMessage = "Signal to noise ratio: " + std::to_string(signalToNoiseRatio);
 
                     std::ostringstream oss;
-                    oss << std::fixed << std::setprecision(7) << longitude;
+                    oss << std::fixed << std::setprecision(8) << longitude;
                     liveLongitude = oss.str();
                     oss.str(""); // Clear the stream
-                    oss << std::fixed << std::setprecision(7) << latitude;
+                    oss << std::fixed << std::setprecision(8) << latitude;
                     liveLatitude = oss.str();
                     oss.str(""); // Clear the stream
-                    oss << std::fixed << std::setprecision(7) << altitude;
+                    oss << std::fixed << std::setprecision(3) << altitude;
                     liveAltitude = oss.str();
 
                     liveHour = hour;
@@ -222,13 +222,13 @@ namespace petitpoucet::ui
                     SNRMessage = "Signal to noise ratio: " + std::to_string(signalToNoiseRatio);
 
                     std::ostringstream oss;
-                    oss << std::fixed << std::setprecision(7) << longitude;
+                    oss << std::fixed << std::setprecision(8) << longitude;
                     liveLongitude = oss.str();
                     oss.str(""); // Clear the stream
-                    oss << std::fixed << std::setprecision(7) << latitude;
+                    oss << std::fixed << std::setprecision(8) << latitude;
                     liveLatitude = oss.str();
                     oss.str(""); // Clear the stream
-                    oss << std::fixed << std::setprecision(7) << altitude;
+                    oss << std::fixed << std::setprecision(3) << altitude;
                     liveAltitude = oss.str();
 
                     liveHour = hour;
