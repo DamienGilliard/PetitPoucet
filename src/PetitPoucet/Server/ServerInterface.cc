@@ -235,13 +235,13 @@ namespace petitpoucet::serverinterface
 
         if(coordinateSystem == 1) // if we use decimal WGS
         {
-            petitpoucet::utils::ConvertNMEAToWGS84Decimal(longitude);
-            petitpoucet::utils::ConvertNMEAToWGS84Decimal(latitude);
+            petitpoucet::utils::conversions::ConvertNMEAToWGS84Decimal(longitude);
+            petitpoucet::utils::conversions::ConvertNMEAToWGS84Decimal(latitude);
         }
         else if(coordinateSystem == 0) // if we use degrees WGS
         {
-            petitpoucet::utils::ConvertNMEAToWGS84Degrees(longitude);
-            petitpoucet::utils::ConvertNMEAToWGS84Degrees(latitude);
+            petitpoucet::utils::conversions::ConvertNMEAToWGS84Degrees(longitude);
+            petitpoucet::utils::conversions::ConvertNMEAToWGS84Degrees(latitude);
         }
     }
 }
