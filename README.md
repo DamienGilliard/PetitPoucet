@@ -11,7 +11,8 @@ The initial usecase is to geolocate point clouds in forests.
 ![evaluation setup](./assets/img/PetitPoucet_evaluation_setup.jpg)
 ## Dependencies
 we use two submodules:
-    > [RTKLIB](https://github.com/DamienGilliard/RTKLIB)
-    > [FTXUI](https://github.com/ArthurSonzogni/FTXUI)
+> [RTKLIB](https://github.com/DamienGilliard/RTKLIB)
+
+> [FTXUI](https://github.com/ArthurSonzogni/FTXUI)
 
 Additionally, building the code requires CMake 3.12 minimum
