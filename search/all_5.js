@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['readconfigfile_0',['readconfigfile',['../classpetitpoucet_1_1serverinterface_1_1ConfigurationSetup.html#a6848bb47001061add1ddb9562a4b9dec',1,'petitpoucet::serverinterface::ConfigurationSetup::ReadConfigFile()'],['../classpetitpoucet_1_1utils_1_1filemanipulation_1_1ConfigurationSetup.html#a3417a9cf365e0b4968f92dbef550594f',1,'petitpoucet::utils::filemanipulation::ConfigurationSetup::ReadConfigFile()']]]
+  ['getcurrentsolution_0',['GetCurrentSolution',['../classpetitpoucet_1_1serverinterface_1_1PPServer.html#ac0ba9a4b230b59d24da41eca581ed19d',1,'petitpoucet::serverinterface::PPServer']]],
+  ['getserverstatus_1',['GetServerStatus',['../classpetitpoucet_1_1serverinterface_1_1PPServer.html#a45210a9ee1890b669147ca06dc7a597c',1,'petitpoucet::serverinterface::PPServer']]],
+  ['givechoicetwooptions_2',['giveChoiceTwoOptions',['../namespacepetitpoucet_1_1ui.html#a51318d5886317dbda74ba3ab419589e6',1,'petitpoucet::ui']]]
 ];
