@@ -22,18 +22,18 @@ int main(int argc, char **argv)
     std::string readConfigFileMessage = "Do you want to use a config file or define the parameters yourself?";
     int readConfigFile = petitpoucet::ui::giveChoiceTwoOptions("Read from config file", " Define myself at runtime", readConfigFileMessage);
 
-    if(readConfigFile == 1)
+    if(readConfigFile == 0)
     {
         std::shared_ptr<petitpoucet::utils::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::utils::filemanipulation::ConfigurationSetup>();
         setup->ReadConfigFile(configFileName, &casterName, &serialPortName);
     }
-    else if (readConfigFile == 0)
+    else if (readConfigFile == 1)
     {
         petitpoucet::ui::configfromUserInput(casterName, serialPortName);
     }
 
     std::string messageForInstantaneous = "Do you want to get instantaneous position or position over time?";
-    int justInstantaneous = petitpoucet::ui::giveChoiceTwoOptions("Instantaneous", "Over time", messageForInstantaneous);
+    int overTime = petitpoucet::ui::giveChoiceTwoOptions("Instantaneous", "Over time", messageForInstantaneous);
 
     petitpoucet::serverinterface::PPServerOptions options;
     petitpoucet::serverinterface::CoordinateSystem coordinateSystem = petitpoucet::serverinterface::CoordinateSystem::WGSDecimals;
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        if(justInstantaneous)
+        if(!overTime)
         {
             petitpoucet::ui::interfaceForInstantaneousPosition(30, options, casterName, serialPortName, coordinateSystem);
         }
