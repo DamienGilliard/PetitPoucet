@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 
     if(readConfigFile == 1)
     {
-        std::shared_ptr<petitpoucet::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::filemanipulation::ConfigurationSetup>();
+        std::shared_ptr<petitpoucet::utils::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::utils::filemanipulation::ConfigurationSetup>();
         setup->ReadConfigFile(configFileName, &casterName, &serialPortName);
     }
     else if (readConfigFile == 0)

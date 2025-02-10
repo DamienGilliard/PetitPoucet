@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     std::string serialPortName;
 
     // Reading the config file
-    std::shared_ptr<petitpoucet::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::filemanipulation::ConfigurationSetup>();
+    std::shared_ptr<petitpoucet::utils::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::utils::filemanipulation::ConfigurationSetup>();
     setup->ReadConfigFile(configFileName, &casterName, &serialPortName);
     petitpoucet::serverinterface::PPServerOptions options;
 
