@@ -8,26 +8,33 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
     - name: Checkout repository
-    uses: actions/checkout@v4
-    with:
-      submodules: true
-    - name: configure
-      run: cd src && mkdir build && cd build
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Create Build Directory
+      run: mkdir -p src/build
+
     - name: Configure CMake
       run: |
-        cd src
-        mkdir -p build
-        cd build
+        cd src/build
         cmake ..
-    - name: make
-      run: cd src/build && make
-    - name: make check
-      run: cd src/build && make check
-    - name: make distcheck
-      run: cd src/build && make distcheck
+
+    - name: Build
+      run: |
+        cd src/build
+        make
+
+    - name: Run Tests
+      run: |
+        cd src/build
+        make check
+
+    - name: Run Distribution Check
+      run: |
+        cd src/build
+        make distcheck
