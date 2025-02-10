@@ -8,11 +8,14 @@
 
 #include <rtklib.h>
 
-#include "../Utils/utils.hh"
+#include "../Utils/Utils.hh"
 
+/**
+ * @brief Namespace for the server interface.
+ */
 namespace petitpoucet::serverinterface
 {
-    /*
+    /**
     @brief This class stores the method for reading the confifile
     */
     class ConfigurationSetup
@@ -24,7 +27,7 @@ namespace petitpoucet::serverinterface
 
         // Methods
         public:
-            /*
+            /**
             @brief Reads a configuration files and attibutes values to a caster name and a serial port name.
             @param std::string configFilName The file name where the configration is stored
             @param std::string* casterName the pointer to the caster name variable where the name of the caster stored in the config file will be stored
@@ -34,7 +37,7 @@ namespace petitpoucet::serverinterface
 
     };
 
-    /*
+    /**
     @brief Enum for the different coordinate systems
     */
     enum CoordinateSystem
@@ -43,7 +46,7 @@ namespace petitpoucet::serverinterface
          WGSDecimals = 1
     };
 
-    /*
+    /**
     @brief This class stores the options for the PPServer when setup by PPServerInterface::SetupServer
     */
     class PPServerOptions
@@ -90,28 +93,28 @@ namespace petitpoucet::serverinterface
 
         // Properties
         private:
-        /*
+        /**
         @brief The rtklib streamserver running in the background
         */
         inline static strsvr_t RTKLIBStreamServer;
 
         // Methods
         private:
-        /*
+        /**
         @brief reads the serial output os the reciever, extracts the relevant NMEA sentence and structures it
         */
         void ReadGNGGASolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp);
-        /*
+        /**
         @brief reads the serial output os the reciever, extracts the relevant NMEA sentence and structures it
         */
         void ReadGNRMCSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, double &horizontalDilutionOfPrecision, std::string &fixQuality, int &timeStamp);
         public:
-        /*
+        /**
         @brief Sets a server up for correcting and reading corrected data
         */
         static PPServer SetupCorrectedReaderServer(std::string *casterName, std::string *serialPortName, PPServerOptions options);
 
-        /*
+        /**
         @brief Sets a server up to send correction data to an RTK reciever, and returns it as a Server object.
         @param std::string* casterName the pointer to the name of the caster we use for the RTK
         @param std::string* serialPortName the pointer to the name of the serial port where the RTK reciever is connected
@@ -120,7 +123,7 @@ namespace petitpoucet::serverinterface
         */
         static PPServer SetupCorrectionServer(std::string *casterName, std::string *serialPortName, PPServerOptions options);
 
-        /*
+        /**
         @brief Sets a server up to listen to an RTK reciever, and returns it as a Server object.
         @param std::string* serialPortName the pointer to the name of the serial port where the RTK reciever is connected
         @param PPServerOptions options The options for the server
@@ -128,8 +131,9 @@ namespace petitpoucet::serverinterface
         */
         static PPServer SetupReaderServer(std::string *serialPortName, PPServerOptions options);
 
-        /*
-        @brief Gets the status of the server and stores it in pointers given as parameters*/
+        /**
+        @brief Gets the status of the server and stores it in pointers given as parameters
+        */
         void GetServerStatus(int *stat, int *log_stat, int *byte, int *bps, std::string *stringMessage);
 
         void GetCurrentSolution(long double &longitude, long double &latitude, long double &altitude, int &signalToNoiseRatio, int &timeStamp, CoordinateSystem coordinateSystem, double &horizontalDilutionOfPrecision, std::string &fixQuality);
