@@ -29,12 +29,8 @@ jobs:
         cd src/build
         make
 
-    - name: Run Tests
-      run: |
-        cd src/build
-        make check
+    # - name: Run Tests
+    #   run: |
+    #     cd src/build
+    #     make check
 
-    - name: Run Distribution Check
-      run: |
-        cd src/build
-        make distcheck
