@@ -37,8 +37,33 @@ target_include_directories(${SHARED_LIB_NAME}
 # RTKLIB
 set(RTKLIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/RTKLIB)
 
-file(GLOB_RECURSE RTKLIB_SOURCES ${RTKLIB_PATH}/src/*.c ${RTKLIB_PATH}/src/*.h)
-
+file(GLOB_RECURSE RTKLIB_SOURCES ${RTKLIB_PATH}/src/rtklib.h 
+    ${RTKLIB_PATH}/src/stream.c
+    ${RTKLIB_PATH}/src/streamsvr.c
+    ${RTKLIB_PATH}/src/rtkcmn.c
+    ${RTKLIB_PATH}/src/trace.c
+    ${RTKLIB_PATH}/src/solution.c
+    ${RTKLIB_PATH}/src/sbas.c
+    ${RTKLIB_PATH}/src/geoid.c
+    ${RTKLIB_PATH}/src/rcvraw.c
+    ${RTKLIB_PATH}/src/rcv/novatel.c
+    ${RTKLIB_PATH}/src/rcv/ublox.c
+    ${RTKLIB_PATH}/src/rcv/ss2.c
+    ${RTKLIB_PATH}/src/rcv/crescent.c
+    ${RTKLIB_PATH}/src/rcv/skytraq.c
+    ${RTKLIB_PATH}/src/rcv/javad.c
+    ${RTKLIB_PATH}/src/rcv/nvs.c
+    ${RTKLIB_PATH}/src/rcv/binex.c
+    ${RTKLIB_PATH}/src/rcv/rt17.c
+    ${RTKLIB_PATH}/src/rtcm.c
+    ${RTKLIB_PATH}/src/rtcm2.c
+    ${RTKLIB_PATH}/src/rtcm3.c
+    ${RTKLIB_PATH}/src/rtcm3e.c
+    ${RTKLIB_PATH}/src/preceph.c
+    ${RTKLIB_PATH}/src/rcv/septentrio.c
+    ${RTKLIB_PATH}/src/rcv/swiftnav.c
+    ${RTKLIB_PATH}/src/rcv/unicore.c)
+    
 add_library(rtk STATIC ${RTKLIB_SOURCES})
 target_compile_options(rtk PRIVATE -fPIC)
 target_compile_definitions(rtk PRIVATE ENAGLO ENAGAL ENAQZS ENACMP ENAIRN TRACE NFREQ=3 NEXOBS=3 SVR_REUSEADDR)
