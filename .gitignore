@@ -15,3 +15,6 @@ cpp/build/
 
 # apple's junk
 .DS_Store
+
+# doxygen
+docs/
