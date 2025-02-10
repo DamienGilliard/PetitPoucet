@@ -14,7 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: configure
-      run: ./configure
+      run: cd src && mkdir build && cd build
+    - name: cmake
+      run: cmake ..
     - name: make
       run: make
     - name: make check
