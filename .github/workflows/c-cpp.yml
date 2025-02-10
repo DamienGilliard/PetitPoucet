@@ -27,3 +27,7 @@ jobs:
         cmake ..
     - name: make
       run: cd src/build && make
+    - name: make check
+      run: cd src/build && make check
+    - name: make distcheck
+      run: cd src/build && make distcheck
