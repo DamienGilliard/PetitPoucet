@@ -6,7 +6,7 @@
 #include <optional>
 
 /**
- * @brief Namespace for utilities.
+ * @brief All conversions functions are stored here.
  */
 namespace petitpoucet::utils::conversions
 {
@@ -25,7 +25,7 @@ namespace petitpoucet::utils::conversions
     void ConvertNMEAToWGS84Degrees(long double &coordinate);
 
     /**
-    @brief converts the raw NMEA  (DDMM.MMMMMM) to degrees, minutes and seconds
+    @brief converts the raw NMEA  (DDMM.MMMMMM) to degrees, minutes and seconds. To be implemented
 
     @param longitude the longitude in DDMM.MMMMMM format
     @param latitude the latitude in DDMM.MMMMMM format
@@ -64,10 +64,13 @@ namespace petitpoucet::utils::conversions
 }
 
 /**
- * @brief Namespace for file manipulation utilities.
+ * @brief the class for file manipulation is stored here.
  */
 namespace petitpoucet::utils::filemanipulation
 {
+    /**
+     * @brief This class stores the method for reading the configuration file. It takes the form of a class to allow for future expansion.
+     */
     class ConfigurationSetup
     {
         // Constructors
