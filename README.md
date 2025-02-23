@@ -20,9 +20,17 @@ The initial usecase is to geolocate point clouds in forests.
 <p align="center"> <img src="https://github.com/DamienGilliard/PetitPoucet/raw/main/assets/img/PetitPoucet_hardware_closup_setup.jpg" width="80%">
 
 ## Dependencies
-we use two submodules:
+PetitPoucet uses two submodules:
 > [RTKLIB](https://github.com/DamienGilliard/RTKLIB)
+This is to manage the connections and data transfers from the ntrip caster and the GNSS reciever, as well as reading the raw reciever solutions. It is solely used in the petitpoucet::serverinterface namespace
 
 > [FTXUI](https://github.com/ArthurSonzogni/FTXUI)
+This is to provide a user interface and is solely used in the petitpoucet::ui namespace
 
-Additionally, building the code requires CMake 3.12 minimum
+Additionally, building the code requires CMake 3.12 minimum, because of FTXUI's minimum requirements
+
+## Usage
+
+A usage example is provided in the form of a [main1.cc](./src/main1.cc) and [main2.cc](./src/main2.cc) combo, to create two processes that both communicate with the same hardware serial port.
+
+An explanation of the key steps of those executables is coming soon.
