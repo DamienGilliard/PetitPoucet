@@ -14,8 +14,10 @@ PetitPoucet is a small library that allows to record geolocations using RTK corr
 A small executable is proposed, with a simple terminal user interface allows some user-friendly basic choices:
 <p align="center"> <img src="https://github.com/DamienGilliard/PetitPoucet/raw/main/assets/img/PetitPoucet_terminal_interface.png" width="80%"> 
 
+The description of a harware setup for which PetitPoucet was typically developped for is available under [./example/hardware_description.md](./example/hardware_description.md)
+
 The initial usecase is to geolocate point clouds in forests.
-<p align="center"> <img src="https://github.com/DamienGilliard/PetitPoucet/raw/main/assets/img/PetitPoucet_demo_in_situation.jpg" width="80%">
+<p align="center"> <img src="https://github.com/DamienGilliard/PetitPoucet/raw/main/assets/img/PetitPoucet_hardware_closup_setup.jpg" width="80%">
 
 ## Dependencies
 we use two submodules:
