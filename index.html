@@ -106,17 +106,24 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>PetitPoucet is a small library that allows to record geolocations using RTK corrections. The library's documentation is available <a href="https://damiengilliard.github.io/PetitPoucet/index.html">here</a></p>
 <p align="center">A small executable is proposed, with a simple terminal user interface allows some user-friendly basic choices: </p>
 <p><img src="https://github.com/DamienGilliard/PetitPoucet/raw/main/assets/img/PetitPoucet_terminal_interface.png" alt="" width="80%" class="inline"/></p>
+<p>The description of a harware setup for which PetitPoucet was typically developped for is available under ./example/hardware_description.md</p>
 <p align="center">The initial usecase is to geolocate point clouds in forests. </p>
-<p><img src="https://github.com/DamienGilliard/PetitPoucet/raw/main/assets/img/PetitPoucet_evaluation_setup.jpg" alt="" width="80%" class="inline"/></p>
+<p><img src="https://github.com/DamienGilliard/PetitPoucet/raw/main/assets/img/PetitPoucet_hardware_closup_setup.jpg" alt="" width="80%" class="inline"/></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Dependencies</h1>
-<p>we use two submodules: </p><blockquote class="doxtable">
+<p>PetitPoucet uses two submodules: </p><blockquote class="doxtable">
 <p>&zwj;<a href="https://github.com/DamienGilliard/RTKLIB">RTKLIB</a> </p>
 </blockquote>
+<p>This is to manage the connections and data transfers from the ntrip caster and the GNSS reciever, as well as reading the raw reciever solutions. It is solely used in the <a class="el" href="namespacepetitpoucet_1_1serverinterface.html" title="Namespace for the server interface.">petitpoucet::serverinterface</a> namespace</p>
 <blockquote class="doxtable">
 <p>&zwj;<a href="https://github.com/ArthurSonzogni/FTXUI">FTXUI</a> </p>
 </blockquote>
-<p>Additionally, building the code requires CMake 3.12 minimum </p>
+<p>This is to provide a user interface and is solely used in the <a class="el" href="namespacepetitpoucet_1_1ui.html" title="Namespace for the user interface.">petitpoucet::ui</a> namespace</p>
+<p>Additionally, building the code requires CMake 3.12 minimum, because of FTXUI's minimum requirements</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Usage</h1>
+<p>A usage example is provided in the form of a <a href="./src/main1.cc">main1.cc</a> and <a href="./src/main2.cc">main2.cc</a> combo, to create two processes that both communicate with the same hardware serial port.</p>
+<p>An explanation of the key steps of those executables is coming soon. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
