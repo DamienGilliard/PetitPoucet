@@ -441,7 +441,6 @@ namespace petitpoucet::ui
             {
                 {
                     std::lock_guard<std::mutex> lock(secondsMutex);
-                    if (secondsLeft.count() <= 0){break;};
                     secondsLeft -= std::chrono::seconds(1);
                 }
                 std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -553,20 +552,21 @@ namespace petitpoucet::ui
                 labels[i], [&] { species = labels[i]; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
         }
         auto buttons = ftxui::Container::Horizontal(buttonsVec);
-        int seconds;
-        {
-            std::lock_guard<std::mutex> lock(secondsMutex);
-            seconds = secondsLeft.count();  
-        }
+        
         auto component = ftxui::Renderer(buttons, [&] 
         {
             std::lock_guard<std::mutex> lock(*messageMutex);
+            int secondsRemaining = 0;
+            {
+                std::lock_guard<std::mutex> lock(secondsMutex);
+                secondsRemaining = secondsLeft.count();  
+            }
             std::ostringstream oss;
             oss << std::fixed << std::setprecision(7);
             return ftxui::vbox({
                 ftxui::vbox({
                     ftxui::text(liveTime),
-                    ftxui::text("Time of recording left: " + std::to_string(seconds) + " seconds"),
+                    ftxui::text("Time of recording left: " + std::to_string(secondsRemaining) + " seconds"),
                     ftxui::text("species label:" + species),
                     ftxui::text(liveFixQuality),
                     ftxui::text(SNRMessage),
