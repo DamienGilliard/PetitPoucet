@@ -428,14 +428,14 @@ namespace petitpoucet::ui
         std::vector<long double> longitudes, latitudes, altitudes;
         std::vector<int> signalToNoiseRatios;
         bool recording = true;
-        std::chrono::seconds secondsLeft = recordingTime.count();
+        std::chrono::seconds secondsLeft = recordingTime;
         
         // Just a small timer to show the user how much time is left for recording
         std::thread timerThread([&] 
         {
             while (running && secondsLeft.count() > 0)
             {
-                secondsLeft = secondsLeft- std::chrono::seconds(1);
+                secondsLeft = std::chrono::seconds(secondsLeft.count()-1);
                 if (secondsLeft.count() <= 0) 
                 {
                     running = false;
