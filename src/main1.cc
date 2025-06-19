@@ -32,9 +32,6 @@ int main(int argc, char **argv)
         petitpoucet::ui::configfromUserInput(casterName, serialPortName);
     }
 
-    std::string messageForLabels = "Do you want to associate position with labels ?";
-    int positionWithLabels = petitpoucet::ui::giveChoiceTwoOptions("associate position with labels", "do not associate position with labels", messageForLabels);
-
     std::string messageForRecordingTime = "For how long do you want to record the position?";
     int recordingTime = petitpoucet::ui::giveChoiceMultipleOptions({"30s", "60s", "120s", "5min"}, messageForRecordingTime);
     if(recordingTime == 0)
@@ -57,6 +54,12 @@ int main(int argc, char **argv)
     std::string messageForInstantaneous = "Do you want to get instantaneous position or position over time?";
     int overTime = petitpoucet::ui::giveChoiceTwoOptions("Instantaneous", "Over time", messageForInstantaneous);
 
+    if (overTime == 1)
+    {
+        std::string messageForLabels = "Do you want to associate position with labels ?";
+        int positionWithLabels = petitpoucet::ui::giveChoiceTwoOptions("associate position with labels", "do not associate position with labels", messageForLabels);
+    }
+
     petitpoucet::serverinterface::PPServerOptions options;
     petitpoucet::serverinterface::CoordinateSystem coordinateSystem = petitpoucet::serverinterface::CoordinateSystem::WGSDecimals;
 
@@ -78,9 +81,14 @@ int main(int argc, char **argv)
         }
         else
         {
-            petitpoucet::ui::interfaceForPositionOverTimeWithLabelsAndTimer(30, options, casterName, serialPortName, coordinateSystem, std::chrono::seconds(recordingTime), labels);
-
-            petitpoucet::ui::interfaceForPositionOverTime(30, options, casterName, serialPortName, coordinateSystem);
+            if (overTime == 1)
+            {
+                petitpoucet::ui::interfaceForPositionOverTimeWithLabelsAndTimer(30, options, casterName, serialPortName, coordinateSystem, std::chrono::seconds(recordingTime), labels);
+            }
+            else
+            {
+                petitpoucet::ui::interfaceForPositionOverTime(30, options, casterName, serialPortName, coordinateSystem);
+            }
         }
         kill(pid, SIGTERM);
     }
