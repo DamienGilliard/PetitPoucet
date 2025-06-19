@@ -52,7 +52,8 @@ namespace petitpoucet::ui
         
         // Modify the way to render them on screen:
         padMessage(liveMessage, WINDOW_WIDTH);
-        auto component = ftxui::Renderer(buttons, [&] {
+        auto component = ftxui::Renderer(buttons, [&] 
+        {
             return ftxui::vbox({
                 ftxui::vbox({
                     ftxui::text(liveMessage),
@@ -77,16 +78,18 @@ namespace petitpoucet::ui
             padMessage(option, WINDOW_WIDTH / options.size());
         }
 
-        std::vector<ftxui::Component> buttonsVec;
-        for (size_t i = 0; i < options.size(); ++i) {
+        std::vector<ftxui::Component> buttonsVec = {};
+        for (size_t i = 0; i < options.size(); i++) 
+        {
             buttonsVec.push_back(ftxui::Button(
-                options[i], [&] { answer = i; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(options.size()-1), 100, 255 * (1-(double(i)/double(options.size()-1)))))));
+                options[i], [&, i] { answer = i; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(options.size()-1), 100, 255 * (1-(double(i)/double(options.size()-1)))))));
         }
         auto buttons = ftxui::Container::Horizontal(buttonsVec);
 
         // Modify the way to render them on screen:
         padMessage(liveMessage, WINDOW_WIDTH);
-        auto component = ftxui::Renderer(buttons, [&] {
+        auto component = ftxui::Renderer(buttons, [&] 
+        {
             return ftxui::vbox({
                 ftxui::vbox({
                     ftxui::text(liveMessage),
@@ -429,16 +432,17 @@ namespace petitpoucet::ui
         std::vector<int> signalToNoiseRatios;
         bool recording = true;
         std::chrono::seconds secondsLeft = recordingTime;
-        
+        std::mutex secondsMutex;
+
         // Just a small timer to show the user how much time is left for recording
         std::thread timerThread([&] 
         {
             while (running && secondsLeft.count() > 0)
             {
-                secondsLeft = std::chrono::seconds(secondsLeft.count()-1);
-                if (secondsLeft.count() <= 0) 
                 {
-                    running = false;
+                    std::lock_guard<std::mutex> lock(secondsMutex);
+                    if (secondsLeft.count() <= 0){break;};
+                    secondsLeft -= std::chrono::seconds(1);
                 }
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
@@ -549,7 +553,11 @@ namespace petitpoucet::ui
                 labels[i], [&] { species = labels[i]; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
         }
         auto buttons = ftxui::Container::Horizontal(buttonsVec);
-
+        int seconds;
+        {
+            std::lock_guard<std::mutex> lock(secondsMutex);
+            seconds = secondsLeft.count();  
+        }
         auto component = ftxui::Renderer(buttons, [&] 
         {
             std::lock_guard<std::mutex> lock(*messageMutex);
@@ -558,7 +566,7 @@ namespace petitpoucet::ui
             return ftxui::vbox({
                 ftxui::vbox({
                     ftxui::text(liveTime),
-                    ftxui::text("Time of recording left: " + std::to_string(secondsLeft.count()) + " seconds"),
+                    ftxui::text("Time of recording left: " + std::to_string(seconds) + " seconds"),
                     ftxui::text("species label:" + species),
                     ftxui::text(liveFixQuality),
                     ftxui::text(SNRMessage),
