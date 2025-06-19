@@ -440,7 +440,7 @@ namespace petitpoucet::ui
             }
             screen.PostEvent(ftxui::Event::Custom);
         });
-        timerThread.join();
+        // timerThread.join();
         long double meanLongitude, meanLatitude, meanAltitude, liveHorizontalDilutionOfPrecision = 0;
         int meanSignalToNoiseRatio = 0;
         long double stdDevLongitude, stdDevLatitude, stdDevAltitude = 0;
@@ -621,6 +621,7 @@ namespace petitpoucet::ui
         screen.Loop(component);
         running = false;
         positionServerThread.join();
+        timerThread.join();
     }
 
     void padMessage(std::string &message, int padding)
