@@ -433,14 +433,14 @@ namespace petitpoucet::ui
         // Just a small timer to show the user how much time is left for recording
         std::thread timerThread([&] {
             std::this_thread::sleep_for(std::chrono::seconds(1));
-            secondsLeft = recordingTime- std::chrono::seconds(1);
+            secondsLeft = secondsLeft- std::chrono::seconds(1);
             if (secondsLeft.count() <= 0) 
             {
                 running = false;
             }
             screen.PostEvent(ftxui::Event::Custom);
         });
-
+        timerThread.join();
         long double meanLongitude, meanLatitude, meanAltitude, liveHorizontalDilutionOfPrecision = 0;
         int meanSignalToNoiseRatio = 0;
         long double stdDevLongitude, stdDevLatitude, stdDevAltitude = 0;
@@ -539,7 +539,8 @@ namespace petitpoucet::ui
         });
 
         std::vector<ftxui::Component> buttonsVec;
-        for (size_t i = 0; i < labels.size(); ++i) {
+        for (size_t i = 0; i < labels.size(); ++i) 
+        {
             buttonsVec.push_back(ftxui::Button(
                 labels[i], [&] { species = labels[i]; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
         }
