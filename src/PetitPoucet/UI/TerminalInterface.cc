@@ -427,7 +427,7 @@ namespace petitpoucet::ui
         std::string species, liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime, liveFixQuality = "initial message";
         std::vector<long double> longitudes, latitudes, altitudes;
         std::vector<int> signalToNoiseRatios;
-        bool recording = false;
+        bool recording = true;
         std::chrono::seconds secondsLeft = recordingTime;
         
         // Just a small timer to show the user how much time is left for recording
