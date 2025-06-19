@@ -433,7 +433,7 @@ namespace petitpoucet::ui
         // Just a small timer to show the user how much time is left for recording
         std::thread timerThread([&] 
         {
-            while (running) && secondsLeft.count() > 0
+            while (running && secondsLeft.count() > 0)
             {
                 secondsLeft = secondsLeft- std::chrono::seconds(1);
                 if (secondsLeft.count() <= 0) 
