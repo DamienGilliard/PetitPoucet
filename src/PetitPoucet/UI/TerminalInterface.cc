@@ -425,7 +425,7 @@ namespace petitpoucet::ui
     void interfaceForPositionOverTimeWithLabelsAndTimer(int minimumSNR, petitpoucet::serverinterface::PPServerOptions options, std::string casterName, std::string serialPortName, petitpoucet::serverinterface::CoordinateSystem coordinateSystem, std::chrono::seconds recordingTime, std::vector<std::string> labels)
     {
         auto screen = ftxui::ScreenInteractive::Fullscreen();
-        std::atomic<bool> running(true);
+        std::atomic<bool> running(false);
         std::string staticMessage = "Waiting for signal to noise ratio to be above " + std::to_string(minimumSNR);
         std::string species, liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime, liveFixQuality = "initial message";
         std::vector<long double> longitudes, latitudes, altitudes;
@@ -442,10 +442,12 @@ namespace petitpoucet::ui
                 {
                     std::lock_guard<std::mutex> lock(secondsMutex);
                     secondsLeft -= std::chrono::seconds(1);
+                    std::cout << secondsLeft.count() << std::endl;
                 }
+                screen.PostEvent(ftxui::Event::Custom);
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
-            screen.PostEvent(ftxui::Event::Custom);
+            
         });
 
         long double meanLongitude, meanLatitude, meanAltitude, liveHorizontalDilutionOfPrecision = 0;
@@ -549,7 +551,8 @@ namespace petitpoucet::ui
         for (size_t i = 0; i < labels.size(); ++i) 
         {
             buttonsVec.push_back(ftxui::Button(
-                labels[i], [&] { species = labels[i]; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
+                labels[i], [&] { species = labels[i]; 
+                                 running = true; }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
         }
         auto buttons = ftxui::Container::Horizontal(buttonsVec);
         
