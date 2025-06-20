@@ -430,7 +430,7 @@ namespace petitpoucet::ui
         std::string species, liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime, liveFixQuality = "initial message";
         std::vector<long double> longitudes, latitudes, altitudes;
         std::vector<int> signalToNoiseRatios;
-        std::atomic<bool> recording(true);
+        std::atomic<bool> recording(false), readyToSave(false);
         std::chrono::seconds secondsLeft = recordingTime;
         std::mutex secondsMutex;
 
@@ -450,6 +450,7 @@ namespace petitpoucet::ui
                         if (secondsLeft.count() <= 0)
                         {
                             recording = false;
+                            readyToSave = true;
                         }
                     }
                     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -468,6 +469,33 @@ namespace petitpoucet::ui
         int stdDevSignalToNoiseRatio = 0;  
         int liveHour, liveMin, liveSec;
         auto messageMutex = std::make_shared<std::mutex>();
+
+        std::thread dataSaver([&]
+        {
+            while (running)
+            {
+                if (readyToSave)
+                {
+                    std::lock_guard<std::mutex> lock(*messageMutex);
+                    std::string filename = "position_with_label" + liveTime + ".csv";
+                    std::ofstream outfile(filename);
+                    outfile << "#Mean longitude;Mean latitude;Mean altitude;SNR;stddev longitude;stddev latitude;stddev altitude;stddev SNR; label" << std::endl;
+                    outfile << std::fixed << std::setprecision(7)
+                            << meanLongitude << ";"
+                            << meanLatitude << ";"
+                            << meanAltitude << ";"
+                            << meanSignalToNoiseRatio << ";"
+                            << stdDevLongitude << ";"
+                            << stdDevLatitude << ";"
+                            << stdDevAltitude << ";"
+                            << stdDevSignalToNoiseRatio << ";"
+                            << species << std::endl;
+                    outfile.close();
+                    readyToSave = false;
+                }
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+        });
 
         std::thread positionServerThread([&] 
         {
@@ -540,24 +568,25 @@ namespace petitpoucet::ui
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
 
-            if (!running)
-            {
-                std::lock_guard<std::mutex> lock(*messageMutex);
-                recording = false; // Stop recording when the timer ends
-                std::string filename = "position" + liveTime + ".csv";
-                std::ofstream outfile(filename);
-                outfile << "#Mean longitude;Mean latitude;Mean altitude;SNR;stddev longitude;stddev latitude;stddev altitude;stddev SNR" << std::endl;
-                outfile << std::fixed << std::setprecision(7)
-                        << meanLongitude << ";"
-                        << meanLatitude << ";"
-                        << meanAltitude << ";"
-                        << meanSignalToNoiseRatio << ";"
-                        << stdDevLongitude << ";"
-                        << stdDevLatitude << ";"
-                        << stdDevAltitude << ";"
-                        << stdDevSignalToNoiseRatio << std::endl;
-                outfile.close();
-            }
+            // if (readyToSave)
+            // {
+            //     std::lock_guard<std::mutex> lock(*messageMutex);
+            //     std::string filename = "position_with_label" + liveTime + ".csv";
+            //     std::ofstream outfile(filename);
+            //     outfile << "#Mean longitude;Mean latitude;Mean altitude;SNR;stddev longitude;stddev latitude;stddev altitude;stddev SNR; label" << std::endl;
+            //     outfile << std::fixed << std::setprecision(7)
+            //             << meanLongitude << ";"
+            //             << meanLatitude << ";"
+            //             << meanAltitude << ";"
+            //             << meanSignalToNoiseRatio << ";"
+            //             << stdDevLongitude << ";"
+            //             << stdDevLatitude << ";"
+            //             << stdDevAltitude << ";"
+            //             << stdDevSignalToNoiseRatio << ";"
+            //             << species << std::endl;
+            //     outfile.close();
+            //     readyToSave = false;
+            // }
         });
 
         std::vector<ftxui::Component> buttonsVec;
@@ -569,7 +598,8 @@ namespace petitpoucet::ui
                                     std::lock_guard<std::mutex> lock(secondsMutex);
                                     secondsLeft = recordingTime;
                                 }
-                                recording = true; }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
+                                recording = true;
+            }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
         }
 
         buttonsVec.push_back(ftxui::Button("0000000 Reset 0000000", [&] 
