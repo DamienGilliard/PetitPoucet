@@ -430,7 +430,7 @@ namespace petitpoucet::ui
         std::string species, liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime, liveFixQuality = "initial message";
         std::vector<long double> longitudes, latitudes, altitudes;
         std::vector<int> signalToNoiseRatios;
-        bool recording(false);
+        std::atomic<bool> recording(false);
         std::chrono::seconds secondsLeft = recordingTime;
         std::mutex secondsMutex;
 
@@ -447,10 +447,14 @@ namespace petitpoucet::ui
                     }
                     screen.PostEvent(ftxui::Event::Custom);
                     std::this_thread::sleep_for(std::chrono::seconds(1));
-                    if (secondsLeft.count() == 0)
+                    if (secondsLeft.count() <= 0)
                     {
-                        secondsLeft = std::chrono::seconds(0);
+                        recording = false;
                     }
+                }
+                else 
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 }
             }
         });
