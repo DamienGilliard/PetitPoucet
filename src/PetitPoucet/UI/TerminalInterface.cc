@@ -462,7 +462,8 @@ namespace petitpoucet::ui
         int liveHour, liveMin, liveSec;
         auto messageMutex = std::make_shared<std::mutex>();
 
-        std::thread positionServerThread([&] {
+        std::thread positionServerThread([&] 
+        {
             petitpoucet::serverinterface::PPServer readerServer = petitpoucet::serverinterface::PPServer::SetupReaderServer(&serialPortName, options);
 
             while (running) {
@@ -556,8 +557,7 @@ namespace petitpoucet::ui
         for (size_t i = 0; i < labels.size(); ++i) 
         {
             buttonsVec.push_back(ftxui::Button(
-                labels[i], [&] { std::lock_guard<std::mutex> lock(*messageMutex);
-                                 species = labels[i]; 
+                labels[i], [&] { species = labels[i]; 
                                  recording = true; }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
         }
 
