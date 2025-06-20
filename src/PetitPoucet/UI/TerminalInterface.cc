@@ -443,14 +443,17 @@ namespace petitpoucet::ui
                 {
                     {
                         std::lock_guard<std::mutex> lock(secondsMutex);
-                        secondsLeft -= std::chrono::seconds(1);
+                        if (secondsLeft.count() > 0)
+                        {
+                            secondsLeft -= std::chrono::seconds(1);
+                        }
+                        if (secondsLeft.count() <= 0)
+                        {
+                            recording = false;
+                        }
                     }
                     screen.PostEvent(ftxui::Event::Custom);
                     std::this_thread::sleep_for(std::chrono::seconds(1));
-                    if (secondsLeft.count() <= 0)
-                    {
-                        recording = false;
-                    }
                 }
                 else 
                 {
@@ -561,8 +564,12 @@ namespace petitpoucet::ui
         for (size_t i = 0; i < labels.size(); ++i) 
         {
             buttonsVec.push_back(ftxui::Button(
-                labels[i], [&] { species = labels[i]; 
-                                 recording = true; }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
+                labels[i], [&] {species = labels[i]; 
+                                {
+                                    std::lock_guard<std::mutex> lock(secondsMutex);
+                                    secondsLeft = recordingTime;
+                                }
+                                recording = true; }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
         }
 
         buttonsVec.push_back(ftxui::Button("0000000 Reset 0000000", [&] 
