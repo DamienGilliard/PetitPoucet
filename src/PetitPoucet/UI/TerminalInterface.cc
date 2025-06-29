@@ -620,6 +620,13 @@ namespace petitpoucet::ui
             stdDevAltitude = 0;
             stdDevSignalToNoiseRatio = 0;
         }, ftxui::ButtonOption::Animated(ftxui::Color::Yellow)));
+
+        buttonsVec.push_back(ftxui::Button("XXXXXXX Quit XXXXXXXX", [&] 
+        { 
+            screen.ExitLoopClosure()(); 
+            running = false;
+        }, ftxui::ButtonOption::Animated(ftxui::Color::Red)));
+        
         auto buttons = ftxui::Container::Horizontal(buttonsVec);
         
         auto component = ftxui::Renderer(buttons, [&] 
