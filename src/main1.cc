@@ -21,13 +21,13 @@ int main(int argc, char **argv)
     std::string serialPortName, serialPortNamecopy;
     std::string readConfigFileMessage = "Do you want to use a config file or define the parameters yourself?";
     int readConfigFile = petitpoucet::ui::giveChoiceTwoOptions("Read from config file", " Define myself at runtime", readConfigFileMessage);
-    std::vector<std::string> labels = {"Label1", "Label2", "Label3", "Label4", "Label5"};
+    std::vector<std::string> labels;
     int positionWithLabels, recordingTime = 0;
 
     if(readConfigFile == 0)
     {
         std::shared_ptr<petitpoucet::utils::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::utils::filemanipulation::ConfigurationSetup>();
-        setup->ReadConfigFile(configFileName, &casterName, &serialPortName);
+        setup->ReadConfigFile(configFileName, &casterName, &serialPortName, &labels);
     }
     else if (readConfigFile == 1)
     {

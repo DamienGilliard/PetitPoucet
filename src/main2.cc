@@ -17,10 +17,11 @@ int main(int argc, char **argv)
     std::string configFileName = "../config.txt";
     std::string casterName;
     std::string serialPortName;
+    std::vector<std::string> labels;
 
     // Reading the config file
     std::shared_ptr<petitpoucet::utils::filemanipulation::ConfigurationSetup> setup = std::make_shared<petitpoucet::utils::filemanipulation::ConfigurationSetup>();
-    setup->ReadConfigFile(configFileName, &casterName, &serialPortName);
+    setup->ReadConfigFile(configFileName, &casterName, &serialPortName, &labels);
     petitpoucet::serverinterface::PPServerOptions options;
 
     // Create the server
