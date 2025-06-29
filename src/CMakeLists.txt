@@ -86,9 +86,9 @@ set(EXECUTABLE_NAME_1 correction_server)
 set(EXECUTABLE_NAME_2 petitpoucet_executable)
 
 add_executable(${EXECUTABLE_NAME_1}
-            main2.cc)    
+            side_server_for_RTK.cc)    
 add_executable(${EXECUTABLE_NAME_2}
-            main1.cc)       
+            main_interface.cc)       
 
 target_link_libraries(${EXECUTABLE_NAME_1} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
 target_link_libraries(${EXECUTABLE_NAME_2} ${SHARED_LIB_NAME} rtk pthread ftxui::screen ftxui::dom ftxui::component) #RTKLIB depends on pthread
