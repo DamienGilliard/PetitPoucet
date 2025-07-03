@@ -52,7 +52,44 @@ namespace petitpoucet::ui
         
         // Modify the way to render them on screen:
         padMessage(liveMessage, WINDOW_WIDTH);
-        auto component = ftxui::Renderer(buttons, [&] {
+        auto component = ftxui::Renderer(buttons, [&] 
+        {
+            return ftxui::vbox({
+                ftxui::vbox({
+                    ftxui::text(liveMessage),
+                }) | ftxui::border,
+                buttons->Render(),
+            });
+        });
+
+        screen.Loop(component);
+
+        return answer;
+    }
+
+    int giveChoiceMultipleOptions(std::vector<std::string> options, std::string &message)
+    {
+        int answer = 0;
+        std::atomic<bool> running(true);
+        std::string liveMessage = message;
+        auto screen = ftxui::ScreenInteractive::Fullscreen();
+        for(auto &option : options)
+        {
+            padMessage(option, WINDOW_WIDTH / options.size());
+        }
+
+        std::vector<ftxui::Component> buttonsVec = {};
+        for (size_t i = 0; i < options.size(); i++) 
+        {
+            buttonsVec.push_back(ftxui::Button(
+                options[i], [&, i] { answer = i; screen.ExitLoopClosure()(); }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(options.size()-1), 100, 255 * (1-(double(i)/double(options.size()-1)))))));
+        }
+        auto buttons = ftxui::Container::Horizontal(buttonsVec);
+
+        // Modify the way to render them on screen:
+        padMessage(liveMessage, WINDOW_WIDTH);
+        auto component = ftxui::Renderer(buttons, [&] 
+        {
             return ftxui::vbox({
                 ftxui::vbox({
                     ftxui::text(liveMessage),
@@ -384,6 +421,297 @@ namespace petitpoucet::ui
         positionServerThread.join();
 
     }
+
+    void interfaceForPositionOverTimeWithLabelsAndTimer(int minimumSNR, petitpoucet::serverinterface::PPServerOptions options, std::string casterName, std::string serialPortName, petitpoucet::serverinterface::CoordinateSystem coordinateSystem, std::chrono::seconds recordingTime, std::vector<std::string> labels)
+    {
+        auto screen = ftxui::ScreenInteractive::Fullscreen();
+        std::atomic<bool> running(true);
+        std::string staticMessage = "Waiting for signal to noise ratio to be above " + std::to_string(minimumSNR);
+        std::string species, liveMessage, SNRMessage, liveLongitude, liveLatitude, liveAltitude, liveTime, liveFixQuality = "initial message";
+        std::vector<long double> longitudes, latitudes, altitudes;
+        std::vector<int> signalToNoiseRatios;
+        std::atomic<bool> recording(false), readyToSave(false);
+        std::chrono::seconds secondsLeft = recordingTime;
+        std::mutex secondsMutex;
+
+        // Just a small timer to show the user how much time is left for recording
+        std::thread timerThread([&] 
+        {
+            while (running)
+            {
+                if (recording)
+                {
+                    {
+                        std::lock_guard<std::mutex> lock(secondsMutex);
+                        if (secondsLeft.count() > 0)
+                        {
+                            secondsLeft -= std::chrono::seconds(1);
+                        }
+                        if (secondsLeft.count() <= 0)
+                        {
+                            recording = false;
+                            readyToSave = true;
+                        }
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    screen.PostEvent(ftxui::Event::Custom);
+                }
+                else 
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                }
+            }
+        });
+
+        long double meanLongitude, meanLatitude, meanAltitude, liveHorizontalDilutionOfPrecision = 0;
+        int meanSignalToNoiseRatio = 0;
+        long double stdDevLongitude, stdDevLatitude, stdDevAltitude = 0;
+        int stdDevSignalToNoiseRatio = 0;  
+        int liveHour, liveMin, liveSec;
+        auto messageMutex = std::make_shared<std::mutex>();
+
+        std::thread dataSaver([&]
+        {
+            while (running)
+            {
+                if (readyToSave)
+                {
+                    std::lock_guard<std::mutex> lock(*messageMutex);
+                    std::string filename = "position_with_label" + liveTime + ".csv";
+                    std::ofstream outfile(filename);
+                    outfile << "#Mean longitude;Mean latitude;Mean altitude;SNR;stddev longitude;stddev latitude;stddev altitude;stddev SNR; label" << std::endl;
+                    outfile << std::fixed << std::setprecision(7)
+                            << meanLongitude << ";"
+                            << meanLatitude << ";"
+                            << meanAltitude << ";"
+                            << meanSignalToNoiseRatio << ";"
+                            << stdDevLongitude << ";"
+                            << stdDevLatitude << ";"
+                            << stdDevAltitude << ";"
+                            << stdDevSignalToNoiseRatio << ";"
+                            << species << std::endl;
+                    outfile.close();
+                    readyToSave = false;
+                }
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+        });
+
+        std::thread positionServerThread([&] 
+        {
+            petitpoucet::serverinterface::PPServer readerServer = petitpoucet::serverinterface::PPServer::SetupReaderServer(&serialPortName, options);
+
+            while (running) {
+                long double longitude, latitude, altitude = 0;
+                double horizontalDilutionOfPrecision = 0;
+                int signalToNoiseRatio = 0;
+                int timeStamp = 0;
+                std::string fixQuality = "";
+                readerServer.GetCurrentSolution(longitude,
+                                                latitude,
+                                                altitude,
+                                                signalToNoiseRatio,
+                                                timeStamp,
+                                                coordinateSystem,
+                                                horizontalDilutionOfPrecision,
+                                                fixQuality);
+
+                int hour = timeStamp / 10000;
+                int min = (timeStamp / 100) % 100;
+                int sec = timeStamp % 100;
+
+                if(horizontalDilutionOfPrecision)
+                {
+                    liveHorizontalDilutionOfPrecision = horizontalDilutionOfPrecision;
+                    liveFixQuality = fixQuality;
+                }
+
+                if(timeStamp)
+                {
+                    std::lock_guard<std::mutex> lock(*messageMutex);
+                    SNRMessage = "Signal to noise ratio: " + std::to_string(signalToNoiseRatio);
+
+                    std::ostringstream oss;
+                    oss << std::fixed << std::setprecision(8) << longitude;
+                    liveLongitude = oss.str();
+                    oss.str(""); // Clear the stream
+                    oss << std::fixed << std::setprecision(8) << latitude;
+                    liveLatitude = oss.str();
+                    oss.str(""); // Clear the stream
+                    oss << std::fixed << std::setprecision(3) << altitude;
+                    liveAltitude = oss.str();
+
+                    liveHour = hour;
+                    liveMin = min;
+                    liveSec = sec;
+
+                    liveTime = std::to_string(hour) + "h" + std::to_string(min) + "m" + std::to_string(sec) + "s";
+
+                    if(recording)
+                    {
+                        longitudes.push_back(longitude);
+                        latitudes.push_back(latitude);
+                        altitudes.push_back(altitude);
+                        signalToNoiseRatios.push_back(signalToNoiseRatio);
+                        meanLongitude = std::accumulate(longitudes.begin(), longitudes.end(), 0.0) / longitudes.size();
+                        meanLatitude = std::accumulate(latitudes.begin(), latitudes.end(), 0.0) / latitudes.size();
+                        meanAltitude = std::accumulate(altitudes.begin(), altitudes.end(), 0.0) / altitudes.size();
+                        meanSignalToNoiseRatio = std::accumulate(signalToNoiseRatios.begin(), signalToNoiseRatios.end(), 0) / signalToNoiseRatios.size();
+
+                        stdDevLongitude = std::sqrt(std::inner_product(longitudes.begin(), longitudes.end(), longitudes.begin(), 0.0) / longitudes.size() - meanLongitude * meanLongitude);
+                        stdDevLatitude = std::sqrt(std::inner_product(latitudes.begin(), latitudes.end(), latitudes.begin(), 0.0) / latitudes.size() - meanLatitude * meanLatitude);
+                        stdDevAltitude = std::sqrt(std::inner_product(altitudes.begin(), altitudes.end(), altitudes.begin(), 0.0) / altitudes.size() - meanAltitude * meanAltitude);
+                        stdDevSignalToNoiseRatio = std::sqrt(std::inner_product(signalToNoiseRatios.begin(), signalToNoiseRatios.end(), signalToNoiseRatios.begin(), 0) / signalToNoiseRatios.size() - meanSignalToNoiseRatio * meanSignalToNoiseRatio);
+                    }
+                }
+                screen.PostEvent(ftxui::Event::Custom);
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            }
+
+            // if (readyToSave)
+            // {
+            //     std::lock_guard<std::mutex> lock(*messageMutex);
+            //     std::string filename = "position_with_label" + liveTime + ".csv";
+            //     std::ofstream outfile(filename);
+            //     outfile << "#Mean longitude;Mean latitude;Mean altitude;SNR;stddev longitude;stddev latitude;stddev altitude;stddev SNR; label" << std::endl;
+            //     outfile << std::fixed << std::setprecision(7)
+            //             << meanLongitude << ";"
+            //             << meanLatitude << ";"
+            //             << meanAltitude << ";"
+            //             << meanSignalToNoiseRatio << ";"
+            //             << stdDevLongitude << ";"
+            //             << stdDevLatitude << ";"
+            //             << stdDevAltitude << ";"
+            //             << stdDevSignalToNoiseRatio << ";"
+            //             << species << std::endl;
+            //     outfile.close();
+            //     readyToSave = false;
+            // }
+        });
+
+        std::vector<ftxui::Component> buttonsVec;
+        for (size_t i = 0; i < labels.size(); ++i) 
+        {
+            buttonsVec.push_back(ftxui::Button(
+                labels[i], [&, i] {species = labels[i]; 
+                                {
+                                    std::lock_guard<std::mutex> lock(secondsMutex);
+                                    secondsLeft = recordingTime;
+                                }
+                                recording = true;
+            }, ftxui::ButtonOption::Animated(ftxui::Color::RGB(255 * double(i)/double(labels.size()-1), 100, 255 * (1-(double(i)/double(labels.size()-1)))))));
+        }
+
+        buttonsVec.push_back(ftxui::Button("0000000 Reset 0000000", [&] 
+        {
+            recording = false;
+            secondsLeft = recordingTime;
+            species.clear();
+            longitudes.clear();
+            latitudes.clear();
+            altitudes.clear();
+            signalToNoiseRatios.clear();
+            meanLongitude = 0;
+            meanLatitude = 0;
+            meanAltitude = 0;
+            meanSignalToNoiseRatio = 0;
+            stdDevLongitude = 0;
+            stdDevLatitude = 0;
+            stdDevAltitude = 0;
+            stdDevSignalToNoiseRatio = 0;
+        }, ftxui::ButtonOption::Animated(ftxui::Color::Yellow)));
+
+        buttonsVec.push_back(ftxui::Button("XXXXXXX Quit XXXXXXXX", [&] 
+        { 
+            screen.ExitLoopClosure()(); 
+            running = false;
+        }, ftxui::ButtonOption::Animated(ftxui::Color::Red)));
+        
+        auto buttons = ftxui::Container::Horizontal(buttonsVec);
+        
+        auto component = ftxui::Renderer(buttons, [&] 
+        {
+            std::lock_guard<std::mutex> lock(*messageMutex);
+            int secondsRemaining = 0;
+            {
+                std::lock_guard<std::mutex> lock(secondsMutex);
+                secondsRemaining = secondsLeft.count();  
+            }
+            std::ostringstream oss;
+            oss << std::fixed << std::setprecision(7);
+            return ftxui::vbox({
+                ftxui::vbox({
+                    ftxui::text(liveTime),
+                    ftxui::text("Time of recording left: " + std::to_string(secondsRemaining) + " seconds"),
+                    ftxui::text("species label:" + species),
+                    ftxui::text(liveFixQuality),
+                    ftxui::text(SNRMessage),
+                    ftxui::hbox({
+                        ftxui::vbox({
+                            ftxui::text("Longitude:"),
+                            ftxui::text(liveLongitude),
+                            [&] {
+                                oss.str("");
+                                oss << "Mean Longitude: " << meanLongitude;
+                                return ftxui::text(oss.str());
+                            }(),
+                            [&] {
+                                oss.str("");
+                                oss << "Std Dev Longitude: " << stdDevLongitude;
+                                return ftxui::text(oss.str());
+                            }(),
+                        }) | ftxui::border,
+                        ftxui::vbox({
+                            ftxui::text("Latitude:"),
+                            ftxui::text(liveLatitude),
+                            [&] {
+                                oss.str("");
+                                oss << "Mean Latitude: " << meanLatitude;
+                                return ftxui::text(oss.str());
+                            }(),
+                            [&] {
+                                oss.str("");
+                                oss << "Std Dev Latitude: " << stdDevLatitude;
+                                return ftxui::text(oss.str());
+                            }(),
+                        }) | ftxui::border,
+                        ftxui::vbox({
+                            ftxui::text("Altitude:"),
+                            ftxui::text(liveAltitude),
+                            [&] {
+                                oss.str("");
+                                oss << "Mean Altitude: " << meanAltitude;
+                                return ftxui::text(oss.str());
+                            }(),
+                            [&] {
+                                oss.str("");
+                                oss << "Std Dev Altitude: " << stdDevAltitude;
+                                return ftxui::text(oss.str());
+                            }(),
+                        }) | ftxui::border,
+                    }),
+                    [&] {
+                        oss.str("");
+                        oss << "Mean SNR: " << meanSignalToNoiseRatio;
+                        return ftxui::vbox({
+                            ftxui::text(oss.str()),
+                            [&] {
+                                oss.str("");
+                                oss << "Std Dev SNR: " << stdDevSignalToNoiseRatio;
+                                return ftxui::text(oss.str());
+                            }(),
+                        }) | ftxui::border;
+                    }(),
+                }) | ftxui::border,
+                buttons->Render(),
+            });
+        });
+        screen.Loop(component);
+        running = false;
+        positionServerThread.join();
+        timerThread.join();
+    }
+
     void padMessage(std::string &message, int padding)
     {
         int paddingOnSides = (padding - message.size()) / 2;

@@ -65,7 +65,7 @@ namespace petitpoucet::utils::conversions
 
 namespace petitpoucet::utils::filemanipulation
 {
-   void ConfigurationSetup::ReadConfigFile(std::string configFileName, std::string *casterName, std::string *serialPortName)
+   void ConfigurationSetup::ReadConfigFile(std::string configFileName, std::string *casterName, std::string *serialPortName, std::vector<std::string> *labels)
             {
                 std::ifstream configFile(configFileName);
                 std::string line;
@@ -82,6 +82,23 @@ namespace petitpoucet::utils::filemanipulation
                         std::string flag = line.substr(0, index);
                         if(flag == "caster"){*casterName = line.substr(index+2, stringLength);};
                         if(flag == "serial"){*serialPortName = line.substr(index+2, stringLength);};
+                        if(flag == "labels")
+                        {
+                            std::string labelsString = line.substr(index+2);
+                            // Remove leading spaces
+                            labelsString.erase(0, labelsString.find_first_not_of(" \t"));
+                            std::stringstream ss(labelsString);
+                            labels->clear(); // Clear the vector before adding new labels
+                            std::string label;
+                            while (std::getline(ss, label, ','))
+                            {
+                                // Remove leading/trailing spaces from each label
+                                label.erase(0, label.find_first_not_of(" \t"));
+                                label.erase(label.find_last_not_of(" \t") + 1);
+                                if (!label.empty())
+                                    labels->push_back(label);
+                            }
+                        }
                     }
                     configFile.close();
                 }

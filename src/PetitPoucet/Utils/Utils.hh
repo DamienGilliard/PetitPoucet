@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <optional>
+#include <vector>
+#include <sstream>
 
 /**
  * @brief Namespace for utilities.
@@ -82,8 +84,9 @@ namespace petitpoucet::utils::filemanipulation
              * @param std::string configFilName The file name where the configration is stored
              * @param std::string* casterName the pointer to the caster name variable where the name of the caster stored in the config file will be stored
              * @param std::string* serialPortName the pointer to the serial port name variable where the name of the serial port stored in the config file will be stored
+             * @param std::vector<std::string>* labels the vector of pointers where the labels stored in the config file will be stored
              */
-            void ReadConfigFile(std::string configFileName, std::string *casterName, std::string *serialPortName);
+            void ReadConfigFile(std::string configFileName, std::string *casterName, std::string *serialPortName, std::vector<std::string> *labels);
 
     };
 }

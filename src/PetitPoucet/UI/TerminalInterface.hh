@@ -40,6 +40,14 @@ namespace petitpoucet::ui
     int giveChoiceTwoOptions(std::string option1, std::string option2, std::string &message);
 
     /**
+    @brief Function to ask the user to choose between multiple options.
+    @param options The options to choose from.
+    @param message The message to display to the user to explain the choice presented.
+    @return The index of the chosen option.
+    */
+    int giveChoiceMultipleOptions(std::vector<std::string> options, std::string &message);
+
+    /**
     @brief User interface for getting the instantaneous position.
     @param allowableSNR The minimum signal to noise ratio to trigger the instantaneous position recording.
     @param options The options for the server.
@@ -47,7 +55,11 @@ namespace petitpoucet::ui
     @param serialPortName The name of the serial port.
     @param coordinateSystem The coordinate system to use.
     */
-    void interfaceForInstantaneousPosition(int minimumSNR, petitpoucet::serverinterface::PPServerOptions options, std::string casterName, std::string serialPortName, petitpoucet::serverinterface::CoordinateSystem coordinateSystem);
+    void interfaceForInstantaneousPosition(int minimumSNR, 
+                                           petitpoucet::serverinterface::PPServerOptions options, 
+                                           std::string casterName, 
+                                           std::string serialPortName, 
+                                           petitpoucet::serverinterface::CoordinateSystem coordinateSystem);
 
     /**
     @brief User interface for getting the position over time, where the user triggers and stops the measurment.
@@ -57,7 +69,29 @@ namespace petitpoucet::ui
     @param serialPortName The name of the serial port.
     @param coordinateSystem The coordinate system to use.
     */
-    void interfaceForPositionOverTime(int minimumSNR, petitpoucet::serverinterface::PPServerOptions options, std::string casterName, std::string serialPortName, petitpoucet::serverinterface::CoordinateSystem coordinateSystem);
+    void interfaceForPositionOverTime(int minimumSNR, 
+                                      petitpoucet::serverinterface::PPServerOptions options, 
+                                      std::string casterName, 
+                                      std::string serialPortName, 
+                                      petitpoucet::serverinterface::CoordinateSystem coordinateSystem);
+
+    /**
+    @brief User interface for getting the position over time, where a timer is used to record the position for a certain amount of time.
+    @param minimumSNR The minimum signal to noise ratio to trigger the instantaneous position recording.
+    @param options The options for the server.
+    @param casterName The name of the caster.
+    @param serialPortName The name of the serial port.
+    @param coordinateSystem The coordinate system to use.
+    @param recordingTime The time to record the position for.
+    @param labels The labels to associate with the position.
+    */
+    void interfaceForPositionOverTimeWithLabelsAndTimer(int minimumSNR, 
+                                                        petitpoucet::serverinterface::PPServerOptions options, 
+                                                        std::string casterName, 
+                                                        std::string serialPortName, 
+                                                        petitpoucet::serverinterface::CoordinateSystem coordinateSystem, 
+                                                        std::chrono::seconds recordingTime, 
+                                                        std::vector<std::string> labels);
 
     /**
     @brief The width of the terminal interface.
