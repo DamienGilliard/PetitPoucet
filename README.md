@@ -31,6 +31,6 @@ Additionally, building the code requires CMake 3.12 minimum, because of FTXUI's 
 
 ## Usage
 
-A usage example is provided in the form of a [main1.cc](./src/main1.cc) and [main2.cc](./src/main2.cc) combo, to create two processes that both communicate with the same hardware serial port.
+A usage example is provided in the form of a [main_interface.cc](./src/main_interface.cc) and [side_server_for_RTK.cc](./src/side_server_for_RTK.cc) combo, to create two processes that both communicate with the same hardware serial port.
 
 An explanation of the key steps of those executables is coming soon.
