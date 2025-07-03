@@ -110,9 +110,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a27ddca59e5583531ff69a8a8dddd8b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac379a0de23935db4264f7830f3b8cab8" id="r_ac379a0de23935db4264f7830f3b8cab8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpetitpoucet_1_1utils_1_1filemanipulation_1_1ConfigurationSetup.html#ac379a0de23935db4264f7830f3b8cab8">~ConfigurationSetup</a> ()=default</td></tr>
 <tr class="separator:ac379a0de23935db4264f7830f3b8cab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3417a9cf365e0b4968f92dbef550594f" id="r_a3417a9cf365e0b4968f92dbef550594f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpetitpoucet_1_1utils_1_1filemanipulation_1_1ConfigurationSetup.html#a3417a9cf365e0b4968f92dbef550594f">ReadConfigFile</a> (std::string configFileName, std::string *casterName, std::string *serialPortName)</td></tr>
-<tr class="memdesc:a3417a9cf365e0b4968f92dbef550594f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a configuration files and attibutes values to a caster name and a serial port name.  <br /></td></tr>
-<tr class="separator:a3417a9cf365e0b4968f92dbef550594f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63ecd69d0662da05980679a8c34fe758" id="r_a63ecd69d0662da05980679a8c34fe758"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpetitpoucet_1_1utils_1_1filemanipulation_1_1ConfigurationSetup.html#a63ecd69d0662da05980679a8c34fe758">ReadConfigFile</a> (std::string configFileName, std::string *casterName, std::string *serialPortName, std::vector&lt; std::string &gt; *labels)</td></tr>
+<tr class="memdesc:a63ecd69d0662da05980679a8c34fe758"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a configuration files and attibutes values to a caster name and a serial port name.  <br /></td></tr>
+<tr class="separator:a63ecd69d0662da05980679a8c34fe758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a27ddca59e5583531ff69a8a8dddd8b26" name="a27ddca59e5583531ff69a8a8dddd8b26"></a>
@@ -166,8 +166,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3417a9cf365e0b4968f92dbef550594f" name="a3417a9cf365e0b4968f92dbef550594f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3417a9cf365e0b4968f92dbef550594f">&#9670;&#160;</a></span>ReadConfigFile()</h2>
+<a id="a63ecd69d0662da05980679a8c34fe758" name="a63ecd69d0662da05980679a8c34fe758"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63ecd69d0662da05980679a8c34fe758">&#9670;&#160;</a></span>ReadConfigFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,7 +188,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>serialPortName</em>&#160;</td>
+          <td class="paramname"><em>serialPortName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; *&#160;</td>
+          <td class="paramname"><em>labels</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -204,6 +210,7 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">std::string</td><td>configFilName The file name where the configration is stored </td></tr>
     <tr><td class="paramname">std::string*</td><td>casterName the pointer to the caster name variable where the name of the caster stored in the config file will be stored </td></tr>
     <tr><td class="paramname">std::string*</td><td>serialPortName the pointer to the serial port name variable where the name of the serial port stored in the config file will be stored </td></tr>
+    <tr><td class="paramname">std::vector&lt;std::string&gt;*</td><td>labels the vector of pointers where the labels stored in the config file will be stored </td></tr>
   </table>
   </dd>
 </dl>

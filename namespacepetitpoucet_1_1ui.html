@@ -113,12 +113,18 @@ Functions</h2></td></tr>
 <tr class="memitem:a51318d5886317dbda74ba3ab419589e6" id="r_a51318d5886317dbda74ba3ab419589e6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepetitpoucet_1_1ui.html#a51318d5886317dbda74ba3ab419589e6">giveChoiceTwoOptions</a> (std::string option1, std::string option2, std::string &amp;message)</td></tr>
 <tr class="memdesc:a51318d5886317dbda74ba3ab419589e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to ask the user to choose between two options. If the user chooses the first option, the function returns 0, otherwise it returns 1.  <br /></td></tr>
 <tr class="separator:a51318d5886317dbda74ba3ab419589e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a2948f6a4c49c1bd14fb5e248b3124d" id="r_a9a2948f6a4c49c1bd14fb5e248b3124d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepetitpoucet_1_1ui.html#a9a2948f6a4c49c1bd14fb5e248b3124d">giveChoiceMultipleOptions</a> (std::vector&lt; std::string &gt; options, std::string &amp;message)</td></tr>
+<tr class="memdesc:a9a2948f6a4c49c1bd14fb5e248b3124d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to ask the user to choose between multiple options.  <br /></td></tr>
+<tr class="separator:a9a2948f6a4c49c1bd14fb5e248b3124d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4fff3d2dd18870512a4f6b940d5e535" id="r_ab4fff3d2dd18870512a4f6b940d5e535"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepetitpoucet_1_1ui.html#ab4fff3d2dd18870512a4f6b940d5e535">interfaceForInstantaneousPosition</a> (int minimumSNR, <a class="el" href="classpetitpoucet_1_1serverinterface_1_1PPServerOptions.html">petitpoucet::serverinterface::PPServerOptions</a> options, std::string casterName, std::string serialPortName, <a class="el" href="namespacepetitpoucet_1_1serverinterface.html#a06eb4593915be26de588744ac970db0f">petitpoucet::serverinterface::CoordinateSystem</a> coordinateSystem)</td></tr>
 <tr class="memdesc:ab4fff3d2dd18870512a4f6b940d5e535"><td class="mdescLeft">&#160;</td><td class="mdescRight">User interface for getting the instantaneous position.  <br /></td></tr>
 <tr class="separator:ab4fff3d2dd18870512a4f6b940d5e535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61cbe5533c9e396cd99fa7611a3cc2ab" id="r_a61cbe5533c9e396cd99fa7611a3cc2ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepetitpoucet_1_1ui.html#a61cbe5533c9e396cd99fa7611a3cc2ab">interfaceForPositionOverTime</a> (int minimumSNR, <a class="el" href="classpetitpoucet_1_1serverinterface_1_1PPServerOptions.html">petitpoucet::serverinterface::PPServerOptions</a> options, std::string casterName, std::string serialPortName, <a class="el" href="namespacepetitpoucet_1_1serverinterface.html#a06eb4593915be26de588744ac970db0f">petitpoucet::serverinterface::CoordinateSystem</a> coordinateSystem)</td></tr>
 <tr class="memdesc:a61cbe5533c9e396cd99fa7611a3cc2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">User interface for getting the position over time, where the user triggers and stops the measurment.  <br /></td></tr>
 <tr class="separator:a61cbe5533c9e396cd99fa7611a3cc2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf5d7a03f7be90bb0faf35c77b88dd19" id="r_abf5d7a03f7be90bb0faf35c77b88dd19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepetitpoucet_1_1ui.html#abf5d7a03f7be90bb0faf35c77b88dd19">interfaceForPositionOverTimeWithLabelsAndTimer</a> (int minimumSNR, <a class="el" href="classpetitpoucet_1_1serverinterface_1_1PPServerOptions.html">petitpoucet::serverinterface::PPServerOptions</a> options, std::string casterName, std::string serialPortName, <a class="el" href="namespacepetitpoucet_1_1serverinterface.html#a06eb4593915be26de588744ac970db0f">petitpoucet::serverinterface::CoordinateSystem</a> coordinateSystem, std::chrono::seconds recordingTime, std::vector&lt; std::string &gt; labels)</td></tr>
+<tr class="memdesc:abf5d7a03f7be90bb0faf35c77b88dd19"><td class="mdescLeft">&#160;</td><td class="mdescRight">User interface for getting the position over time, where a timer is used to record the position for a certain amount of time.  <br /></td></tr>
+<tr class="separator:abf5d7a03f7be90bb0faf35c77b88dd19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ab7864d74c9b22c427d2d0cdc84e60f" id="r_a6ab7864d74c9b22c427d2d0cdc84e60f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepetitpoucet_1_1ui.html#a6ab7864d74c9b22c427d2d0cdc84e60f">padMessage</a> (std::string &amp;message, int padding)</td></tr>
 <tr class="memdesc:a6ab7864d74c9b22c427d2d0cdc84e60f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to pad a message with a certain number of dashes on each side.  <br /></td></tr>
 <tr class="separator:a6ab7864d74c9b22c427d2d0cdc84e60f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,6 +172,44 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a9a2948f6a4c49c1bd14fb5e248b3124d" name="a9a2948f6a4c49c1bd14fb5e248b3124d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a2948f6a4c49c1bd14fb5e248b3124d">&#9670;&#160;</a></span>giveChoiceMultipleOptions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int petitpoucet::ui::giveChoiceMultipleOptions </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>options</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>message</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to ask the user to choose between multiple options. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">options</td><td>The options to choose from. </td></tr>
+    <tr><td class="paramname">message</td><td>The message to display to the user to explain the choice presented. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The index of the chosen option. </dd></dl>
 
 </div>
 </div>
@@ -323,6 +367,78 @@ Variables</h2></td></tr>
     <tr><td class="paramname">casterName</td><td>The name of the caster. </td></tr>
     <tr><td class="paramname">serialPortName</td><td>The name of the serial port. </td></tr>
     <tr><td class="paramname">coordinateSystem</td><td>The coordinate system to use. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abf5d7a03f7be90bb0faf35c77b88dd19" name="abf5d7a03f7be90bb0faf35c77b88dd19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf5d7a03f7be90bb0faf35c77b88dd19">&#9670;&#160;</a></span>interfaceForPositionOverTimeWithLabelsAndTimer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void petitpoucet::ui::interfaceForPositionOverTimeWithLabelsAndTimer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>minimumSNR</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classpetitpoucet_1_1serverinterface_1_1PPServerOptions.html">petitpoucet::serverinterface::PPServerOptions</a>&#160;</td>
+          <td class="paramname"><em>options</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>casterName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>serialPortName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacepetitpoucet_1_1serverinterface.html#a06eb4593915be26de588744ac970db0f">petitpoucet::serverinterface::CoordinateSystem</a>&#160;</td>
+          <td class="paramname"><em>coordinateSystem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::chrono::seconds&#160;</td>
+          <td class="paramname"><em>recordingTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>labels</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>User interface for getting the position over time, where a timer is used to record the position for a certain amount of time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">minimumSNR</td><td>The minimum signal to noise ratio to trigger the instantaneous position recording. </td></tr>
+    <tr><td class="paramname">options</td><td>The options for the server. </td></tr>
+    <tr><td class="paramname">casterName</td><td>The name of the caster. </td></tr>
+    <tr><td class="paramname">serialPortName</td><td>The name of the serial port. </td></tr>
+    <tr><td class="paramname">coordinateSystem</td><td>The coordinate system to use. </td></tr>
+    <tr><td class="paramname">recordingTime</td><td>The time to record the position for. </td></tr>
+    <tr><td class="paramname">labels</td><td>The labels to associate with the position. </td></tr>
   </table>
   </dd>
 </dl>

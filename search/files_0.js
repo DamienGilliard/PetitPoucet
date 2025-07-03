@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['main1_2ecc_0',['main1.cc',['../main1_8cc.html',1,'']]],
-  ['main2_2ecc_1',['main2.cc',['../main2_8cc.html',1,'']]]
+  ['main_5finterface_2ecc_0',['main_interface.cc',['../main__interface_8cc.html',1,'']]]
 ];
